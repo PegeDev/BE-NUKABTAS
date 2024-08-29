@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Models\FormMwcnu;
+use Illuminate\Support\Str;
 use Exception;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Livewire\Component;
@@ -28,16 +30,30 @@ class DetailMwcnu extends Component implements HasForms, HasInfolists
 
     public function mount($record)
     {
+        // dd($this->record->form_mwcnu->is_enabled);
 
         $this->record = $record;
-        $this->isOpen = $this->record->form_mwcnu->is_enabled !== 0 ? true : false;
+        $this->isOpen = $this->record->form_mwcnu ? ($this->record->form_mwcnu->is_enabled !== 0 ? true : false) : false;
+        // $this->isOpen = $record->form_mwcnu->is_enabled === 1 ? true : false;
+        // dd($this->isOpen);
+    }
+
+
+    public function buatForm()
+    {
+        $create = FormMwcnu::create([
+            "mwcnu_id" => $this->record->id,
+            "is_enabled" => "1",
+            "code" => Str::random(40)
+        ]);
+        return $create;
     }
 
 
     public function handleStatusForm(string $bool)
     {
 
-        $this->record->form_mwcnu->is_enabled = $bool ? "1" : "0";
+        $this->record->form_mwcnu->is_enabled =  $bool ? "1" : "0";
         $this->record->form_mwcnu->save();
     }
 }
