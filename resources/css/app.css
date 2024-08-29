@@ -1,0 +1,91 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* SIDEBAR STYLE */
+
+body {
+    @apply bg-slate-200 !important;
+}
+
+.rounded-xl {
+    @apply rounded-md !important;
+}
+.fi-sidebar {
+    @apply bg-primary !important;
+}
+
+.fi-sidebar-header {
+    @apply bg-primary  !important;
+}
+
+.fi-logo {
+    @apply text-white font-bold text-4xl  !important;
+}
+
+.fi-sidebar-item-active .fi-sidebar-item-button {
+    @apply bg-white/10 text-white !important;
+}
+
+.fi-sidebar-item-active .fi-sidebar-item-label,
+.fi-sidebar-item-active .fi-sidebar-item-icon {
+    @apply text-white;
+}
+.fi-sidebar-item-label {
+    @apply text-white/70 hover:text-white;
+}
+
+.fi-sidebar-item-button {
+    @apply hover:bg-white/10 focus-visible:bg-white/10  !important;
+}
+
+.fi-sidebar-item-icon {
+    @apply group-hover:text-white;
+}
+
+.fi-sidebar-group-label {
+    @apply font-semibold text-white uppercase;
+}
+
+/* .fi-sidebar-group .fi-icon-btn {
+    @apply text-white;
+} */
+
+/* TABS STYLE */
+
+.fi-tabs-item {
+    @apply hover:bg-primary text-gray-400 hover:text-white transition duration-300 ease-in-out !important;
+}
+
+.fi-tabs-item-icon,
+.fi-tabs-item-label {
+    @apply transition duration-300 ease-in-out group-hover:text-white;
+}
+
+/* .fi-tabs-item .fi-tabs-item-icon {
+    @apply text-black group-hover:text-white;
+} */
+
+.fi-tabs-item-active {
+    @apply text-white bg-primary !important;
+}
+
+/* REPEATER */
+input.fi-fo-repeater-item {
+    @apply overflow-hidden;
+}
+
+.fi-fo-repeater-item-header {
+    @apply bg-slate-200 text-white  !important;
+}
+
+/* .fi-fo-radio {
+    @apply ;
+} */
+
+input {
+    @apply disabled:bg-slate-200 disabled:cursor-not-allowed;
+}
