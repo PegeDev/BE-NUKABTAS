@@ -142,7 +142,7 @@ class MwcnuResource extends Resource implements HasShieldPermissions
                                             ->maxSize(2048)
                                             ->directory("surat_tugas")
                                             ->getUploadedFileNameForStorageUsing(
-                                                fn(DetailMwcnu $record, Get $get): string => (string) str("Surat-Tugas-Admin-" . Str::slug($get("nama_admin")) . ".pdf"),
+                                                fn(Get $get): string => (string) str("Surat-Tugas-Admin-" . Str::slug($get("nama_admin")) . ".pdf"),
                                             )
                                             ->acceptedFileTypes(["application/pdf"])
                                             ->required(),
