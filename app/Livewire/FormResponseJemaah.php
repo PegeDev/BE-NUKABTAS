@@ -70,7 +70,7 @@ class FormResponseJemaah extends Component implements HasForms
 
             $state["telp"] =  "62" . str_replace(" ", "", preg_replace("/0/", "", $state["telp"]));
 
-            dd($state);
+            // dd($state);
             $formatedJemaah = [
                 "nama_lengkap" => $state["nama_lengkap"],
                 "nama_panggilan" => $state["nama_panggilan"],
