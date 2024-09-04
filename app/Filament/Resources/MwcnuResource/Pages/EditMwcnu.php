@@ -37,8 +37,7 @@ class EditMwcnu extends EditRecord
                 "mwcnu_id" => $this->record->id
             ]);
 
-            // $this->record->status()->associate($status);
-            $this->record->status()->save();
+
 
             $recipient = User::role(['super_admin', 'admin_kabupaten'])->get();
             Notification::make()
