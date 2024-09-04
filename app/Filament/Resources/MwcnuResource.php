@@ -21,6 +21,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -141,7 +142,7 @@ class MwcnuResource extends Resource implements HasShieldPermissions
                                             ->maxSize(2048)
                                             ->directory("surat_tugas")
                                             ->getUploadedFileNameForStorageUsing(
-                                                fn(DetailMwcnu $record): string => (string) str("Surat-Tugas-Admin-" . Str::slug($record->nama_ketua) . ".pdf"),
+                                                fn(DetailMwcnu $record, Get $get): string => (string) str("Surat-Tugas-Admin-" . Str::slug($get("nama_admin")) . ".pdf"),
                                             )
                                             ->acceptedFileTypes(["application/pdf"])
                                             ->required(),
