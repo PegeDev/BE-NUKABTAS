@@ -70,6 +70,7 @@ class FormResponseJemaah extends Component implements HasForms
 
             $state["telp"] =  "62" . str_replace(" ", "", preg_replace("/0/", "", $state["telp"]));
 
+            dd($state);
             $formatedJemaah = [
                 "nama_lengkap" => $state["nama_lengkap"],
                 "nama_panggilan" => $state["nama_panggilan"],
@@ -83,7 +84,7 @@ class FormResponseJemaah extends Component implements HasForms
                 "kepengurusan" => $state["kepengurusan"] ?? "",
                 "jabatan_kepengurusan" => $state["jabatan_kepengurusan"] ?? "",
                 "alamat_lengkap" => json_encode([
-                    "provinsi" => $state["provinsi"],
+                    "provinsi" => $state["provinsi"] ?? "32",
                     "kota" => $state["kota"],
                     "kecamatan" => $state["kecamatan"],
                     "desa" => $state["desa"],
@@ -237,6 +238,7 @@ class FormResponseJemaah extends Component implements HasForms
                                             ->required()
                                             ->placeholder("Pilih Kota")
                                             ->preload()
+                                            ->label("Kab/Kota")
                                             ->searchable()
                                             ->live()
 
