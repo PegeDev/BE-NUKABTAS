@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\MwcnuResource\Pages;
 
 use App\Exports\JamaahExport;
+use App\Filament\Resources\JamaahResource;
 use App\Filament\Resources\MwcnuResource;
 use App\Forms\Components\SelectList;
 use App\Imports\JamaahImport;
@@ -96,19 +97,21 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
             ->actions([
                 ActionGroup::make([
                     ViewAction::make("detail")
-                        ->label("Profile detail")
-                        ->icon("heroicon-o-user-circle"),
+                        ->label("Detail Warga")
+                        ->url(fn(Jemaah $record): string => route(JamaahResource::getUrl("detail", ["record" => $record->id])))
+                        ->icon("heroicon-o-user"),
                     EditAction::make("edit")
                         ->label("Edit")
                         ->icon("heroicon-o-pencil-square")
                 ])
                     ->dropdownPlacement("bottom-end")
             ])
-            ->bulkActions([])
+            ->groupedBulkActions([])
             ->headerActions([
                 Action::make("Import")
                     ->icon("heroicon-o-document-arrow-up")
                     ->color('info')
+                    ->size(ActionSize::Large)
                     ->form([
                         FileUpload::make("attachment")
                             ->acceptedFileTypes(["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel"])
@@ -123,6 +126,7 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
                 Action::make("Export")
                     ->icon("heroicon-o-document-arrow-down")
                     ->color('info')
+                    ->size(ActionSize::Large)
                     ->action(
                         fn() => Excel::download(new JamaahExport($this->record->jemaahs), "Jamaah-{$this->record->nama_kecamatan}.xlsx")
                     ),
@@ -134,7 +138,7 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
                         ->url(function () {
                             return route('filament.dashboard.resources.data-kecamatan.create-jamaah', ['record' => $this->record]);
                         }),
-                    Action::make("Pilih Kepengurusan dari daftar")
+                    Action::make("Pilih Kepengurusan")
                         ->icon("heroicon-o-user-circle")
                         ->form([
                             SelectList::make("kepengurusan")
@@ -154,7 +158,7 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
                         ->modalWidth("xl")
                 ])
                     ->button()
-                    ->size(ActionSize::ExtraLarge)
+                    ->size(ActionSize::Large)
                     ->label("Tambah Jamaah")
                     ->icon("heroicon-o-plus")
                     ->dropdownPlacement('bottom-end')

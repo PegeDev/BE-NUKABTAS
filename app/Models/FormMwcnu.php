@@ -16,6 +16,10 @@ class FormMwcnu extends Model
         "code"
     ];
 
+    protected $casts = [
+        "is_enabled" => "boolean"
+    ];
+
     public function mwcnu()
     {
         return $this->belongsTo(Mwcnu::class);

@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\Permission\Traits\HasRoles;
@@ -31,5 +33,20 @@ class Mwcnu extends Model
     public function form_mwcnu(): HasOne
     {
         return $this->hasOne(FormMwcnu::class);
+    }
+
+    public function user(): belongsTo
+    {
+        return $this->belongsTo(User::class, "admin_id");
+    }
+
+    public function detail_mwcnus(): HasOne
+    {
+        return $this->hasOne(DetailMwcnu::class);
+    }
+
+    public function status(): HasMany
+    {
+        return $this->hasMany(MwcnuStatus::class);
     }
 }

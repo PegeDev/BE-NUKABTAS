@@ -26,40 +26,88 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        DB::table('permissions')->insert([
-            [
-                'name' => 'Create MWCNU',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'Delete MWCNU',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'Update MWCNU',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'View MWCNU',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'Create Jemaah',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'Delete Jemaah',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'Update Jemaah',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'View Jemaah',
-                'guard_name' => 'web',
-            ],
-        ]);
+        // DB::table('permissions')->insert([
+        //     [
+        //         'name' => 'Create Master Data',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'Delete Master Data',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'Update Master Data',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'View Master Data',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'Create Master Desa',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'Delete Master Desa',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'Update Master Desa',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'View Master Desa',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'Create Role',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'Delete Role',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'Update Role',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'View Role',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'Create Role',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'Delete Role',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'Update Role',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'View Role',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'Create Permission',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'Delete Permission',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'Update Permission',
+        //         'guard_name' => 'web',
+        //     ],
+        //     [
+        //         'name' => 'View Permission',
+        //         'guard_name' => 'web',
+        //     ],
+        // ]);
 
         // DB::table("roles")->insert([
         //     [
@@ -87,6 +135,12 @@ class DatabaseSeeder extends Seeder
         //             "desa" => "Hegarwangi",
         //         ]
         //     ]);
+
+        // $users = DB::table("users")
+        //     ->where("id", "1")->first();
+
+        // $role = DB::table("roles")->where("name", "dev")->first();
+        // $users->role()->attach($role->id);
 
         // $this->call([
         //     ProvincesSeeder::class,

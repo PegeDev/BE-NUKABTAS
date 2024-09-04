@@ -3,40 +3,32 @@
 namespace App\Livewire;
 
 use App\Models\FormMwcnu;
+use App\Models\Mwcnu;
 use Illuminate\Support\Str;
-use Exception;
-use Filament\Forms\Concerns\InteractsWithForms;
 use Livewire\Component;
 use Illuminate\Contracts\View\View;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Infolists\Concerns\InteractsWithInfolists;
-use Filament\Infolists\Contracts\HasInfolists;
-use Illuminate\Support\Facades\Log;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
 
-class DetailMwcnu extends Component implements HasForms, HasInfolists
+class DetailMwcnu extends Component implements HasForms
 {
 
     use InteractsWithForms;
-    use InteractsWithInfolists;
 
-    public $record;
+    public Mwcnu $record;
 
     public $isOpen = false;
 
-    public function render(): View
-    {
-        return view('livewire.detail-mwcnu');
-    }
 
-    public function mount($record)
+    public function mount(Mwcnu $record)
     {
-        // dd($this->record->form_mwcnu->is_enabled);
-
         $this->record = $record;
-        $this->isOpen = $this->record->form_mwcnu ? ($this->record->form_mwcnu->is_enabled !== 0 ? true : false) : false;
-        // $this->isOpen = $record->form_mwcnu->is_enabled === 1 ? true : false;
-        // dd($this->isOpen);
+        $this->isOpen = $this->record->form_mwcnu->is_enabled ?? false;
     }
+
 
 
     public function buatForm()
@@ -53,7 +45,15 @@ class DetailMwcnu extends Component implements HasForms, HasInfolists
     public function handleStatusForm(string $bool)
     {
 
-        $this->record->form_mwcnu->is_enabled =  $bool ? "1" : "0";
+        $this->record->form_mwcnu->is_enabled = $bool;
         $this->record->form_mwcnu->save();
+    }
+
+
+
+    public function render(): View
+    {
+
+        return view('livewire.detail-mwcnu');
     }
 }

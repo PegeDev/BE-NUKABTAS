@@ -2,22 +2,20 @@
 
 namespace App\Policies;
 
-use App\Models\Kecamatan;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\Kecamatan;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class KecamatanPolicy
 {
+    use HandlesAuthorization;
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        if ($user->hasRole(['dev']) || $user->hasPermissionTo("View Master Kecamatan")) {
-
-            return true;
-        }
-        return false;
+        return $user->can('view_any_kecamatan');
     }
 
     /**
@@ -25,11 +23,7 @@ class KecamatanPolicy
      */
     public function view(User $user, Kecamatan $kecamatan): bool
     {
-        if ($user->hasRole(['dev']) || $user->hasPermissionTo("View Master Kecamatan")) {
-
-            return true;
-        }
-        return false;
+        return $user->can('view_kecamatan');
     }
 
     /**
@@ -37,11 +31,7 @@ class KecamatanPolicy
      */
     public function create(User $user): bool
     {
-        if ($user->hasRole(['dev']) || $user->hasPermissionTo("Create Master Kecamatan")) {
-
-            return true;
-        }
-        return false;
+        return $user->can('create_kecamatan');
     }
 
     /**
@@ -49,11 +39,7 @@ class KecamatanPolicy
      */
     public function update(User $user, Kecamatan $kecamatan): bool
     {
-        if ($user->hasRole(['dev']) || $user->hasPermissionTo("Update Master Kecamatan")) {
-
-            return true;
-        }
-        return false;
+        return $user->can('update_kecamatan');
     }
 
     /**
@@ -61,26 +47,62 @@ class KecamatanPolicy
      */
     public function delete(User $user, Kecamatan $kecamatan): bool
     {
-        if ($user->hasRole(['dev']) || $user->hasPermissionTo("Delete Master Kecamatan")) {
-
-            return true;
-        }
-        return false;
+        return $user->can('delete_kecamatan');
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Determine whether the user can bulk delete.
      */
-    public function restore(User $user, Kecamatan $kecamatan): bool
+    public function deleteAny(User $user): bool
     {
-        //
+        return $user->can('delete_any_kecamatan');
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Determine whether the user can permanently delete.
      */
     public function forceDelete(User $user, Kecamatan $kecamatan): bool
     {
-        //
+        return $user->can('{{ ForceDelete }}');
+    }
+
+    /**
+     * Determine whether the user can permanently bulk delete.
+     */
+    public function forceDeleteAny(User $user): bool
+    {
+        return $user->can('{{ ForceDeleteAny }}');
+    }
+
+    /**
+     * Determine whether the user can restore.
+     */
+    public function restore(User $user, Kecamatan $kecamatan): bool
+    {
+        return $user->can('{{ Restore }}');
+    }
+
+    /**
+     * Determine whether the user can bulk restore.
+     */
+    public function restoreAny(User $user): bool
+    {
+        return $user->can('{{ RestoreAny }}');
+    }
+
+    /**
+     * Determine whether the user can replicate.
+     */
+    public function replicate(User $user, Kecamatan $kecamatan): bool
+    {
+        return $user->can('{{ Replicate }}');
+    }
+
+    /**
+     * Determine whether the user can reorder.
+     */
+    public function reorder(User $user): bool
+    {
+        return $user->can('{{ Reorder }}');
     }
 }

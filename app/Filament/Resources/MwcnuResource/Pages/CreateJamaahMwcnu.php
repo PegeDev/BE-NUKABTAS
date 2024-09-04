@@ -5,6 +5,7 @@ namespace App\Filament\Resources\MwcnuResource\Pages;
 use App\Filament\Resources\JamaahResource;
 use App\Filament\Resources\MwcnuResource;
 use App\Forms\Components\GridHeading;
+use App\Forms\Components\RepeaterCustom;
 use App\Models\DetailJemaah;
 use App\Models\Jemaah;
 use Exception;
@@ -14,6 +15,7 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
@@ -115,10 +117,12 @@ class CreateJamaahMwcnu extends Page implements HasForms
                                 Grid::make()
                                     ->schema([
                                         TextInput::make("email")
+                                            ->required()
                                             ->placeholder("Email")
                                             ->required()
                                             ->label("Alamat Email"),
                                         TextInput::make("telp")
+                                            ->required()
                                             ->prefix("+62")
                                             ->tel()
                                             ->mask("999 9999 99999")
@@ -137,13 +141,15 @@ class CreateJamaahMwcnu extends Page implements HasForms
                                             ->extraAttributes([
                                                 "class" => "justify-between py-1.5 px-2  border rounded-lg"
                                             ])
+                                            ->required()
                                             ->inlineLabel(false),
                                         TextInput::make("pekerjaan")
+                                            ->required()
                                             ->placeholder("Dosen, wiraswasta, dll.")
                                             ->label("Pekerjaan"),
                                     ])
                                     ->columns(2),
-                                View::make("forms.components.grid-heading")
+                                GridHeading::make()
                                     ->schema([
                                         Grid::make()
                                             ->schema([
@@ -152,6 +158,9 @@ class CreateJamaahMwcnu extends Page implements HasForms
                                                         $province = Province::all()->pluck("name", "code")->toArray();
                                                         return $province;
                                                     })
+                                                    ->required()
+                                                    ->default("32")
+                                                    ->disabled()
                                                     ->placeholder("Pilih Provinsi")
                                                     ->preload()
                                                     ->searchable()
@@ -161,6 +170,7 @@ class CreateJamaahMwcnu extends Page implements HasForms
                                                         $findCity = City::where('province_code', $get("provinsi"))->pluck('name', 'code')->toArray();
                                                         return $findCity ?? [];
                                                     })
+                                                    ->required()
                                                     ->placeholder("Pilih Kota")
                                                     ->preload()
                                                     ->searchable()
@@ -175,6 +185,7 @@ class CreateJamaahMwcnu extends Page implements HasForms
                                                         $findKota = District::where('city_code', $get("kota"))->pluck('name', 'code')->toArray();
                                                         return  $findKota ?? [];
                                                     })
+                                                    ->required()
                                                     ->placeholder("Pilih Kecamatan")
                                                     ->preload()
                                                     ->searchable()
@@ -184,6 +195,7 @@ class CreateJamaahMwcnu extends Page implements HasForms
                                                         $findDesa = Village::where('district_code', $get("kecamatan"))->pluck('name', 'code')->toArray();
                                                         return $findDesa ?? [];
                                                     })
+                                                    ->required()
                                                     ->placeholder("Pilih Desa")
                                                     ->preload()
                                                     ->searchable()
@@ -193,6 +205,7 @@ class CreateJamaahMwcnu extends Page implements HasForms
                                         Grid::make()
                                             ->schema([
                                                 Textarea::make('alamat_detail')
+                                                    ->required()
                                                     ->label("Alamat Lengkap")
                                                     ->rows(6)
                                                     ->cols(10)
@@ -201,17 +214,19 @@ class CreateJamaahMwcnu extends Page implements HasForms
                                             ->columns(2)
                                     ])
                                     ->label("Alamat"),
-                                View::make("forms.components.grid-heading")
+                                GridHeading::make()
                                     ->schema([
                                         TextInput::make("kepengurusan")
+                                            ->required()
                                             ->placeholder("")
                                             ->label("Kepengurusan di NU"),
                                         TextInput::make("jabatan_kepengurusan")
+                                            ->required()
                                             ->placeholder("Ketua, Wakil Ketua, dll.")
                                             ->label("Jabatan Kepengurusan"),
                                     ])
                                     ->columns(2),
-                                View::make("forms.components.grid-heading")
+                                GridHeading::make()
                                     ->schema([
                                         Select::make("pendidikan_terakhir")
                                             ->placeholder("Pilih pendidikan terakhir")
@@ -225,13 +240,26 @@ class CreateJamaahMwcnu extends Page implements HasForms
                                                 "s2" => "S2",
                                                 "s3" => "S3",
                                             ])
+                                            ->required()
                                             ->label("Pendidikan Terakhir")
-                                            ->native(false)
-                                            ->columnSpanFull(),
+                                            ->native(false),
+                                        Select::make("penghasilan")
+                                            ->placeholder("Pilih Penghasilan")
+                                            ->options([
+                                                "0" => "dibawah 1 Juta",
+                                                "1" => "1,1 Juta - 2,5 Juta",
+                                                "2" => "2,6 Juta - 5 Juta",
+                                                "3" => "5,1 Juta - 7,5 Juta",
+                                                "4" => "7,6 Juta - 10 Juta",
+                                                "5" => "10,1 Juta Keatas",
 
+                                            ])
+                                            ->required()
+                                            ->label("Penghasilan /bulan")
+                                            ->native(false)
                                     ])
                                     ->columns(2),
-                                View::make("forms.components.grid-heading")
+                                GridHeading::make()
                                     ->schema([
                                         Radio::make('isPesantren')
                                             ->options([
@@ -278,8 +306,9 @@ class CreateJamaahMwcnu extends Page implements HasForms
 
                                     ])
                                     ->columns(2),
-                                View::make("forms.components.grid-heading")
+                                GridHeading::make()
                                     ->schema([
+
                                         Repeater::make('riwayat_pendidikan')
                                             ->label('Riwayat Pendidikan Formal')
                                             ->schema([
@@ -307,6 +336,27 @@ class CreateJamaahMwcnu extends Page implements HasForms
                                             ->defaultItems(0)
                                             ->collapsible()
                                             ->columnSpanFull()
+
+                                        // RepeaterCustom::make("riwayat_pendidikan")
+                                        //     ->label('Riwayat Pendidikan Formal')
+                                        //     ->schema([
+                                        //         TextInput::make('nama_sekolah')
+                                        //             ->label('Nama Sekolah / Perguruan Tinggi')
+                                        //             ->required(),
+                                        //         TextInput::make('jurusan')
+                                        //             ->label('Jurusan / Prodi')
+                                        //             ->required(),
+                                        //         Grid::make()
+                                        //             ->schema([
+                                        //                 TextInput::make('tahun_masuk')
+                                        //                     ->label('Tahun Masuk')
+                                        //                     ->required(),
+                                        //                 TextInput::make('tahun_lulus')
+                                        //                     ->label('Tahun Lulus'),
+                                        //             ])->columns(2)
+                                        //     ])
+                                        //     ->columnSpanFull()
+
                                     ])
                                     ->columns(2)
 
@@ -323,9 +373,27 @@ class CreateJamaahMwcnu extends Page implements HasForms
                             ->schema([
                                 FileUpload::make('profile_picture')
                                     ->avatar()
+                                    ->image()
+                                    ->required()
+                                    ->imageEditor()
+                                    ->directory("images/profile")
+                                    ->maxSize(2048)
                                     ->hiddenLabel(true)
                                     ->extraAttributes([
-                                        "class" => "w-ful flex justify-center"
+                                        "class" => "w-full flex justify-center"
+                                    ])
+                            ])->columns(1),
+                        Section::make("Foto KTP")
+                            ->schema([
+                                FileUpload::make('foto_ktp')
+                                    ->image()
+                                    ->required()
+                                    ->imageEditor()
+                                    ->directory("images/ktp")
+                                    ->maxSize(2048)
+                                    ->hiddenLabel(true)
+                                    ->extraAttributes([
+                                        "class" => "w-full flex justify-center"
                                     ])
                             ])->columns(1),
                         Section::make("Riwayat Organisasi")
@@ -375,7 +443,7 @@ class CreateJamaahMwcnu extends Page implements HasForms
                                             ->icon("heroicon-o-plus");
                                     }),
 
-                                View::make("forms.components.grid-heading"),
+                                GridHeading::make(),
                                 Repeater::make('riwayat_organisasi_external')
                                     ->label('Pengalaman Organisasi External')
                                     ->schema([
@@ -496,6 +564,7 @@ class CreateJamaahMwcnu extends Page implements HasForms
                 "riwayat_organisasi" => $state["riwayat_organisasi"],
                 "riwayat_organisasi_external" => $state["riwayat_organisasi_external"],
                 "status_pernikahan" => $state["status_pernikahan"],
+                "foto_ktp" => $state["foto_ktp"] ?? "",
                 "jemaah_id" => $jemaah->id,
             ];
 

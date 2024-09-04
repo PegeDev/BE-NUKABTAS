@@ -2,22 +2,20 @@
 
 namespace App\Policies;
 
-use App\Models\Jemaah;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\Jemaah;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class JemaahPolicy
 {
+    use HandlesAuthorization;
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        if ($user->hasRole(['dev']) || $user->hasPermissionTo("View Jemaah")) {
-
-            return true;
-        }
-        return false;
+        return $user->can('view_any_jamaah');
     }
 
     /**
@@ -25,11 +23,7 @@ class JemaahPolicy
      */
     public function view(User $user, Jemaah $jemaah): bool
     {
-        if ($user->hasRole(['dev']) || $user->hasPermissionTo("View Jemaah")) {
-
-            return true;
-        }
-        return false;
+        return $user->can('view_jamaah');
     }
 
     /**
@@ -37,11 +31,7 @@ class JemaahPolicy
      */
     public function create(User $user): bool
     {
-        if ($user->hasRole(['dev']) || $user->hasPermissionTo("Create Jemaah")) {
-
-            return true;
-        }
-        return false;
+        return $user->can('create_jamaah');
     }
 
     /**
@@ -49,11 +39,7 @@ class JemaahPolicy
      */
     public function update(User $user, Jemaah $jemaah): bool
     {
-        if ($user->hasRole(['dev']) || $user->hasPermissionTo("Update Jemaah")) {
-
-            return true;
-        }
-        return false;
+        return $user->can('update_jamaah');
     }
 
     /**
@@ -61,26 +47,62 @@ class JemaahPolicy
      */
     public function delete(User $user, Jemaah $jemaah): bool
     {
-        if ($user->hasRole(['dev']) || $user->hasPermissionTo("Delete Jemaah")) {
-
-            return true;
-        }
-        return false;
+        return $user->can('delete_jamaah');
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Determine whether the user can bulk delete.
      */
-    public function restore(User $user, Jemaah $jemaah): bool
+    public function deleteAny(User $user): bool
     {
-        //
+        return $user->can('delete_any_jamaah');
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Determine whether the user can permanently delete.
      */
     public function forceDelete(User $user, Jemaah $jemaah): bool
     {
-        //
+        return $user->can('{{ ForceDelete }}');
+    }
+
+    /**
+     * Determine whether the user can permanently bulk delete.
+     */
+    public function forceDeleteAny(User $user): bool
+    {
+        return $user->can('{{ ForceDeleteAny }}');
+    }
+
+    /**
+     * Determine whether the user can restore.
+     */
+    public function restore(User $user, Jemaah $jemaah): bool
+    {
+        return $user->can('{{ Restore }}');
+    }
+
+    /**
+     * Determine whether the user can bulk restore.
+     */
+    public function restoreAny(User $user): bool
+    {
+        return $user->can('{{ RestoreAny }}');
+    }
+
+    /**
+     * Determine whether the user can replicate.
+     */
+    public function replicate(User $user, Jemaah $jemaah): bool
+    {
+        return $user->can('{{ Replicate }}');
+    }
+
+    /**
+     * Determine whether the user can reorder.
+     */
+    public function reorder(User $user): bool
+    {
+        return $user->can('{{ Reorder }}');
     }
 }

@@ -2,9 +2,13 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Auth\EditProfile;
+use App\Filament\Pages\Dashboard;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -18,9 +22,15 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Contracts\View\View as ContractsViewView;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\View\View as ViewView;
 
 class DashboardPanelProvider extends PanelProvider
 {
+
+
     public function panel(Panel $panel): Panel
     {
         return $panel
@@ -36,7 +46,7 @@ class DashboardPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
-                Pages\Dashboard::class,
+                Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
@@ -44,7 +54,6 @@ class DashboardPanelProvider extends PanelProvider
                 // Widgets\FilamentInfoWidget::class,
             ])
             ->maxContentWidth(MaxWidth::ScreenTwoExtraLarge)
-            ->sidebarCollapsibleOnDesktop(true)
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -58,6 +67,23 @@ class DashboardPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->plugins([
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
+
+            ])
+            ->spa()
+            ->sidebarCollapsibleOnDesktop()
+            ->collapsedSidebarWidth('10rem')
+            ->sidebarWidth('20rem')
+            ->databaseNotifications()
+            ->profile(EditProfile::class, isSimple: false)
+            ->userMenuItems([
+                "profile" => MenuItem::make()
+                    ->label('Profil'),
+                MenuItem::make()
+                    ->label("Dashboard")
+                    ->url("/dashboard")
             ])
             ->viteTheme('resources/css/app.css');
     }

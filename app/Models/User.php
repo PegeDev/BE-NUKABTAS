@@ -3,13 +3,19 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
+use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasName, HasAvatar
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
@@ -21,7 +27,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
+        "profile_picture"
     ];
 
     /**
@@ -30,8 +36,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
         'remember_token',
+        "password"
     ];
 
     /**
@@ -42,4 +48,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function mwcnus(): HasOne
+    {
+        return $this->hasOne(Mwcnu::class, "admin_id");
+    }
+
+    public function getFilamentName(): string
+    {
+        return "{$this->email}";
+    }
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->profile_picture !== null ? Storage::url($this->profile_picture) : null;
+    }
 }

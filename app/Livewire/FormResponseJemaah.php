@@ -26,12 +26,14 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\ActionSize;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Laravolt\Indonesia\Models\City;
 use Laravolt\Indonesia\Models\District;
 use Laravolt\Indonesia\Models\Province;
 use Laravolt\Indonesia\Models\Village;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
 class FormResponseJemaah extends Component implements HasForms
@@ -39,7 +41,10 @@ class FormResponseJemaah extends Component implements HasForms
 
     use InteractsWithForms;
 
+
+
     public $mwcnu;
+
     public $code;
 
     public ?array $data = [];
@@ -50,7 +55,7 @@ class FormResponseJemaah extends Component implements HasForms
         $find =  FormMwcnu::where('code', $code)->first();
         $mwcnu = Mwcnu::where("id", $find->mwcnu_id)->first();
 
-        if (!$find || $find->is_enabled == 0) {
+        if (!$find || !$find->is_enabled || !$mwcnu->detail_mwcnus()->exists()) {
             abort(403);
         } else {
             $this->mwcnu = $mwcnu;
@@ -120,7 +125,6 @@ class FormResponseJemaah extends Component implements HasForms
                 ->body($e->getMessage())
                 ->send();
         }
-        // dd($this->form->getState());
     }
 
     public function form(Form $form): Form
@@ -133,9 +137,11 @@ class FormResponseJemaah extends Component implements HasForms
                             ->schema([
                                 TextInput::make("nama_lengkap")
                                     ->required()
+                                    ->placeholder("Nama Lengkap")
                                     ->minLength(2)
                                     ->maxLength(255),
                                 TextInput::make("nama_panggilan")
+                                    ->placeholder("Nama Panggilan")
                                     ->minLength(2)
                                     ->maxLength(255),
                             ])
@@ -216,6 +222,8 @@ class FormResponseJemaah extends Component implements HasForms
                                                 $province = Province::all()->pluck("name", "code")->toArray();
                                                 return $province;
                                             })
+                                            ->default("32")
+                                            ->disabled()
                                             ->required()
                                             ->placeholder("Pilih Provinsi")
                                             ->preload()
@@ -262,8 +270,10 @@ class FormResponseJemaah extends Component implements HasForms
                                     ->schema([
                                         Textarea::make('alamat_detail')
                                             ->label("Alamat Lengkap")
+                                            ->placeholder("Nama Jalan, Gang, No. Rumah, RT dan RW")
                                             ->rows(6)
                                             ->cols(10)
+                                            ->autosize(false)
                                             ->columnSpanFull()
                                     ])
                                     ->columns(2)
@@ -293,10 +303,23 @@ class FormResponseJemaah extends Component implements HasForms
                                         "s2" => "S2",
                                         "s3" => "S3",
                                     ])
+                                    ->required()
                                     ->label("Pendidikan Terakhir")
-                                    ->native(false)
-                                    ->columnSpanFull(),
+                                    ->native(false),
+                                Select::make("penghasilan")
+                                    ->placeholder("Pilih Penghasilan")
+                                    ->options([
+                                        "0" => "dibawah 1 Juta",
+                                        "1" => "1,1 Juta - 2,5 Juta",
+                                        "2" => "2,6 Juta - 5 Juta",
+                                        "3" => "5,1 Juta - 7,5 Juta",
+                                        "4" => "7,6 Juta - 10 Juta",
+                                        "5" => "10,1 Juta Keatas",
 
+                                    ])
+                                    ->required()
+                                    ->label("Penghasilan /bulan")
+                                    ->native(false)
                             ])
                             ->columns(2),
                         GridHeading::make()
@@ -405,8 +428,19 @@ class FormResponseJemaah extends Component implements HasForms
                                     ->extraAttributes([
                                         "class" => "w-full flex justify-center"
                                     ])
+                                    ->directory("images/profile")
                                     ->imageEditor()
-                                    ->label("Foto Profil")
+                                    ->maxSize(2048)
+                                    ->label("Foto Profil"),
+                                FileUpload::make('foto_ktp')
+                                    ->extraAttributes([
+                                        "class" => "w-full flex justify-center"
+                                    ])
+                                    ->directory("images/ktp")
+                                    ->imageEditor()
+                                    ->required()
+                                    ->maxSize(2048)
+                                    ->label("Foto KTP")
                             ])
                             ->columns(1),
                     ]),
@@ -436,8 +470,6 @@ class FormResponseJemaah extends Component implements HasForms
                                 ->extraAttributes([
                                     "class" => "w-full bg-primary"
                                 ])
-
-
                         ])->columnSpanFull()
                     ])
             ])->statePath('data');
@@ -446,6 +478,6 @@ class FormResponseJemaah extends Component implements HasForms
 
     public function render()
     {
-        return view('livewire.form-response-jemaah');
+        return view('livewire.form-response-jemaah')->title("Formulir Pendaftaran {$this->mwcnu->nama_kecamatan} | " . config("app.name"));
     }
 }

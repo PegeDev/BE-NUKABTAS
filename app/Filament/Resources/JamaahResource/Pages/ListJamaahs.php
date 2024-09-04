@@ -10,6 +10,8 @@ class ListJamaahs extends ListRecords
 {
     protected static string $resource = JamaahResource::class;
 
+    protected static ?string $title = "Data Warga";
+
     protected function getHeaderActions(): array
     {
         return [

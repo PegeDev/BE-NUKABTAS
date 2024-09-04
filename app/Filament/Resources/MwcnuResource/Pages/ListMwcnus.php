@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\MwcnuResource\Pages;
 
 use App\Filament\Resources\MwcnuResource;
-use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListMwcnus extends ListRecords

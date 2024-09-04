@@ -1,7 +1,11 @@
 <?php
 
+use App\Filament\Pages\Auth\EditProfile;
 use App\Livewire\FormResponseJemaah;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,8 +20,23 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('form/{code}', FormResponseJemaah::class)->name("form-response");
 
+// Route::get("/dashboard/profile", EditProfile::class)->name("profile");
+
 Route::get('/', function () {
     return ['Laravel' => app()->version()];
 });
+
+
+Route::get('/surat_tugas/{filename}', function ($filename) {
+    // Laravel is ignoring the header method and is sending a plain html/txt :(
+    // So a normal php header can do the workaround
+    header("Content-type: application/pdf");
+
+    $filename = "../public/storage/surat_tugas/" . $filename;
+
+    $response = Response::make(readfile($filename), 200);
+    $response->header('Content-Type', 'application/pdf');
+    return $response;
+})->name("surat-tugas");
 
 require __DIR__ . '/auth.php';

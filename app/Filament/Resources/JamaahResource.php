@@ -25,7 +25,7 @@ class JamaahResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
-    protected static ?string $navigationLabel = "Data Jemaah";
+    protected static ?string $navigationLabel = "Data Warga";
 
 
     public static function form(Form $form): Form
@@ -97,7 +97,7 @@ class JamaahResource extends Resource
                 // Tables\Actions\EditAction::make(),
             ])
             ->headerActions([])
-            ->bulkActions([
+            ->groupedBulkActions([
                 // Tables\Actions\BulkActionGroup::make([
                 //     Tables\Actions\DeleteBulkAction::make(),
                 // ]),
@@ -121,6 +121,7 @@ class JamaahResource extends Resource
             'index' => Pages\ListJamaahs::route('/'),
             'create' => Pages\CreateJamaah::route('/create'),
             'edit' => Pages\EditJamaah::route('/{record}/edit'),
+            "detail" => Pages\DetailJamaah::route('/{record}'),
         ];
     }
 }

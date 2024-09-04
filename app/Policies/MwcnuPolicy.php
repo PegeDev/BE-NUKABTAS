@@ -2,22 +2,20 @@
 
 namespace App\Policies;
 
-use App\Models\Mwcnu;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\Mwcnu;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class MwcnuPolicy
 {
+    use HandlesAuthorization;
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        if ($user->hasRole(['dev']) || $user->hasPermissionTo("View MWCNU")) {
-
-            return true;
-        }
-        return false;
+        return $user->can('view_any_mwcnu');
     }
 
     /**
@@ -25,11 +23,7 @@ class MwcnuPolicy
      */
     public function view(User $user, Mwcnu $mwcnu): bool
     {
-        if ($user->hasRole(['dev']) || $user->hasPermissionTo("View MWCNU")) {
-
-            return true;
-        }
-        return false;
+        return $user->can('view_mwcnu');
     }
 
     /**
@@ -37,11 +31,7 @@ class MwcnuPolicy
      */
     public function create(User $user): bool
     {
-        if ($user->hasRole(['dev']) || $user->hasPermissionTo("Create MWCNU")) {
-
-            return true;
-        }
-        return false;
+        return $user->can('create_mwcnu');
     }
 
     /**
@@ -49,11 +39,7 @@ class MwcnuPolicy
      */
     public function update(User $user, Mwcnu $mwcnu): bool
     {
-        if ($user->hasRole(['dev']) || $user->hasPermissionTo("Update MWCNU")) {
-
-            return true;
-        }
-        return false;
+        return $user->can('update_mwcnu');
     }
 
     /**
@@ -61,26 +47,72 @@ class MwcnuPolicy
      */
     public function delete(User $user, Mwcnu $mwcnu): bool
     {
-        if ($user->hasRole(['dev']) || $user->hasPermissionTo("Delete MWCNU")) {
-
-            return true;
-        }
-        return false;
+        return $user->can('delete_mwcnu');
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Determine whether the user can bulk delete.
      */
-    public function restore(User $user, Mwcnu $mwcnu): bool
+    public function deleteAny(User $user): bool
     {
-        //
+        return $user->can('delete_any_mwcnu');
+    }
+
+    public function import(User $user): bool
+    {
+        return $user->can('import_mwcnu');
+    }
+
+    public function manageAdmin(User $user): bool
+    {
+        return $user->can('manage_admin_mwcnu');
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Determine whether the user can permanently delete.
      */
     public function forceDelete(User $user, Mwcnu $mwcnu): bool
     {
-        //
+        return $user->can('{{ ForceDelete }}');
+    }
+
+    /**
+     * Determine whether the user can permanently bulk delete.
+     */
+    public function forceDeleteAny(User $user): bool
+    {
+        return $user->can('{{ ForceDeleteAny }}');
+    }
+
+    /**
+     * Determine whether the user can restore.
+     */
+    public function restore(User $user, Mwcnu $mwcnu): bool
+    {
+        return $user->can('{{ Restore }}');
+    }
+
+    /**
+     * Determine whether the user can bulk restore.
+     */
+    public function restoreAny(User $user): bool
+    {
+        return $user->can('{{ RestoreAny }}');
+    }
+
+    /**
+     * Determine whether the user can replicate.
+     */
+    public function replicate(User $user, Mwcnu $mwcnu): bool
+    {
+        return $user->can('{{ Replicate }}');
+    }
+
+    /**
+     * Determine whether the user can reorder.
+     */
+    public function reorder(User $user): bool
+    {
+        return $user->can('{{ Reorder }}');
     }
 }
