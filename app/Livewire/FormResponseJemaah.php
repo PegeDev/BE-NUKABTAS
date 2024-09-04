@@ -98,13 +98,13 @@ class FormResponseJemaah extends Component implements HasForms
 
             $formatedDetailJemaah = [
                 "penghasilan" => $state["penghasilan"] ?? "0",
-                "pekerjaan" => $state["pekerjaan"],
-                "alamat_detail" => $state["alamat_detail"],
-                "pendidikan_terakhir" => $state["pendidikan_terakhir"],
-                "riwayat_pendidikan" => $state["riwayat_pendidikan"],
+                "pekerjaan" => $state["pekerjaan"] ?? "",
+                "alamat_detail" => $state["alamat_detail"] ?? "",
+                "pendidikan_terakhir" => $state["pendidikan_terakhir"] ?? "",
+                "riwayat_pendidikan" => $state["riwayat_pendidikan"] ?? [],
                 "riwayat_pesantren" => $state["riwayat_pesantren"] ?? [],
-                "riwayat_organisasi" => $state["riwayat_organisasi"],
-                "riwayat_organisasi_external" => $state["riwayat_organisasi_external"],
+                "riwayat_organisasi" => $state["riwayat_organisasi"] ?? [],
+                "riwayat_organisasi_external" => $state["riwayat_organisasi_external"] ?? [],
                 "status_pernikahan" => $state["status_pernikahan"],
                 "jemaah_id" => $jemaah->id,
             ];
