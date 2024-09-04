@@ -98,7 +98,7 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
                 ActionGroup::make([
                     ViewAction::make("detail")
                         ->label("Detail Warga")
-                        ->url(fn(Jemaah $record): string => route(JamaahResource::getUrl("detail", ["record" => $record->id])))
+                        // ->url(fn(Jemaah $record): string => route(JamaahResource::getUrl("detail", ["record" => $record->id])))
                         ->icon("heroicon-o-user"),
                     EditAction::make("edit")
                         ->label("Edit")
