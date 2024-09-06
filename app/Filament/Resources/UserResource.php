@@ -67,6 +67,11 @@ class UserResource extends Resource
                 TextColumn::make('email')
                     ->searchable(),
                 TextColumn::make("roles.name")
+                    ->color(fn(string $state): string =>  match ($state) {
+                        'admin_kecamatan' => 'info',
+                        'admin_kabupaten' => 'primary',
+                        default => 'warning',
+                    })
                     ->badge(function (User $record) {
                         return $record;
                     }),

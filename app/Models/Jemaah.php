@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\Permission\Traits\HasRoles;
 
 class Jemaah extends Model
@@ -25,21 +27,21 @@ class Jemaah extends Model
         "alamat_lengkap",
         "kepengurusan",
         "jabatan_kepengurusan",
-        "alamat_lengkap",
+        "status_pernikahan",
         'mwcnu_id'
     ];
 
-    protected $casts = [
-        'alamat_lengkap' => 'json',
-    ];
 
-    public function kecamatan()
-    {
-        return $this->belongsTo(Kecamatan::class, 'kecamatan_id');
-    }
 
-    public function detail()
+
+
+    public function detail(): HasOne
     {
         return $this->hasOne(DetailJemaah::class);
+    }
+
+    public function alamat_jemaah(): HasOne
+    {
+        return $this->hasOne(AlamatJemaah::class);
     }
 }

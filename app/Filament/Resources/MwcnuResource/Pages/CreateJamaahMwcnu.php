@@ -15,6 +15,7 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Repeater;
@@ -96,7 +97,6 @@ class CreateJamaahMwcnu extends Page implements HasForms
                                             ->native(false)
                                             ->required()
                                             ->label("Status Pernikahan"),
-
                                     ])
                                     ->columns(2),
                                 Grid::make()
@@ -143,70 +143,82 @@ class CreateJamaahMwcnu extends Page implements HasForms
                                             ])
                                             ->required()
                                             ->inlineLabel(false),
-                                        TextInput::make("pekerjaan")
-                                            ->required()
-                                            ->placeholder("Dosen, wiraswasta, dll.")
-                                            ->label("Pekerjaan"),
+                                        Group::make()
+                                            ->relationship("detail")
+                                            ->schema([
+                                                TextInput::make("pekerjaan")
+                                                    ->required()
+                                                    ->placeholder("Dosen, wiraswasta, dll.")
+                                                    ->label("Pekerjaan"),
+                                            ])
                                     ])
                                     ->columns(2),
                                 GridHeading::make()
                                     ->schema([
-                                        Grid::make()
+                                        Group::make()
+                                            ->relationship("alamat_jemaah")
                                             ->schema([
-                                                Select::make('provinsi')
-                                                    ->options(function (Get $get) {
-                                                        $province = Province::all()->pluck("name", "code")->toArray();
-                                                        return $province;
-                                                    })
-                                                    ->required()
-                                                    ->default("32")
-                                                    ->disabled()
-                                                    ->placeholder("Pilih Provinsi")
-                                                    ->preload()
-                                                    ->searchable()
-                                                    ->live(),
-                                                Select::make('kota')
-                                                    ->options(function (Get $get) {
-                                                        $findCity = City::where('province_code', $get("provinsi"))->pluck('name', 'code')->toArray();
-                                                        return $findCity ?? [];
-                                                    })
-                                                    ->required()
-                                                    ->placeholder("Pilih Kota")
-                                                    ->preload()
-                                                    ->searchable()
-                                                    ->live()
+                                                Grid::make()
+                                                    ->schema([
+                                                        Select::make('provinsi')
+                                                            ->options(function (Get $get) {
+                                                                $province = Province::all()->pluck("name", "code")->toArray();
+                                                                return $province;
+                                                            })
+                                                            ->afterStateHydrated(function (Select $component) {
+                                                                return $component->state("32");
+                                                            })
+                                                            ->required()
+                                                            ->disabled()
+                                                            ->default("32")
+                                                            ->placeholder("Pilih Provinsi")
+                                                            ->live(),
+                                                        Select::make('kota')
+                                                            ->options(function (Get $get) {
+                                                                $findCity = City::where('province_code', $get("provinsi"))->pluck('name', 'code')->toArray();
+                                                                return $findCity ?? [];
+                                                            })
+                                                            ->required()
+                                                            ->placeholder("Pilih Kota")
+                                                            ->preload()
+                                                            ->searchable()
+                                                            ->live()
 
-                                            ])
-                                            ->columns(2),
+                                                    ])
+                                                    ->columns(2),
+                                                Grid::make()
+                                                    ->schema([
+                                                        Select::make('kecamatan')
+                                                            ->options(function (Get $get) {
+                                                                $findKota = District::where('city_code', $get("kota"))->pluck('name', 'code')->toArray();
+                                                                return  $findKota ?? [];
+                                                            })
+                                                            ->required()
+                                                            ->placeholder("Pilih Kecamatan")
+                                                            ->preload()
+                                                            ->searchable()
+                                                            ->live(),
+                                                        Select::make('desa')
+                                                            ->options(function (Get $get) {
+                                                                $findDesa = Village::where('district_code', $get("kecamatan"))->pluck('name', 'code')->toArray();
+                                                                return $findDesa ?? [];
+                                                            })
+                                                            ->required()
+                                                            ->placeholder("Pilih Desa")
+                                                            ->preload()
+                                                            ->searchable()
+                                                            ->live()
+
+                                                    ])
+                                                    ->columns(2),
+                                            ]),
                                         Grid::make()
-                                            ->schema([
-                                                Select::make('kecamatan')
-                                                    ->options(function (Get $get) {
-                                                        $findKota = District::where('city_code', $get("kota"))->pluck('name', 'code')->toArray();
-                                                        return  $findKota ?? [];
-                                                    })
-                                                    ->required()
-                                                    ->placeholder("Pilih Kecamatan")
-                                                    ->preload()
-                                                    ->searchable()
-                                                    ->live(),
-                                                Select::make('desa')
-                                                    ->options(function (Get $get) {
-                                                        $findDesa = Village::where('district_code', $get("kecamatan"))->pluck('name', 'code')->toArray();
-                                                        return $findDesa ?? [];
-                                                    })
-                                                    ->required()
-                                                    ->placeholder("Pilih Desa")
-                                                    ->preload()
-                                                    ->searchable()
-                                                    ->live(),
-                                            ])
-                                            ->columns(2),
-                                        Grid::make()
+                                            ->relationship("detail")
                                             ->schema([
                                                 Textarea::make('alamat_detail')
                                                     ->required()
                                                     ->label("Alamat Lengkap")
+                                                    ->placeholder("Nama Jalan, Gang, No. Rumah, RT dan RW")
                                                     ->rows(6)
                                                     ->cols(10)
                                                     ->columnSpanFull()
@@ -226,140 +238,121 @@ class CreateJamaahMwcnu extends Page implements HasForms
                                             ->label("Jabatan Kepengurusan"),
                                     ])
                                     ->columns(2),
-                                GridHeading::make()
+                                Group::make()
+                                    ->relationship("detail")
                                     ->schema([
-                                        Select::make("pendidikan_terakhir")
-                                            ->placeholder("Pilih pendidikan terakhir")
-                                            ->options([
-                                                "pondok pesantren" => "Pondok Pesantren",
-                                                "sd" => "SD / Sederajat",
-                                                "smp" => "SMP / Sederajat",
-                                                "sma" => "SMA / Sederajat",
-                                                "d3" => "D3",
-                                                "s1" => "S1",
-                                                "s2" => "S2",
-                                                "s3" => "S3",
-                                            ])
-                                            ->required()
-                                            ->label("Pendidikan Terakhir")
-                                            ->native(false),
-                                        Select::make("penghasilan")
-                                            ->placeholder("Pilih Penghasilan")
-                                            ->options([
-                                                "0" => "dibawah 1 Juta",
-                                                "1" => "1,1 Juta - 2,5 Juta",
-                                                "2" => "2,6 Juta - 5 Juta",
-                                                "3" => "5,1 Juta - 7,5 Juta",
-                                                "4" => "7,6 Juta - 10 Juta",
-                                                "5" => "10,1 Juta Keatas",
-
-                                            ])
-                                            ->required()
-                                            ->label("Penghasilan /bulan")
-                                            ->native(false)
-                                    ])
-                                    ->columns(2),
-                                GridHeading::make()
-                                    ->schema([
-                                        Radio::make('isPesantren')
-                                            ->options([
-                                                'pernah' => 'Pernah',
-                                                'belum pernah' => 'Belum Pernah',
-                                            ])
-                                            ->label("Apakah pernah belajar dan mengaji di Pondok Pesantren?")
-                                            ->columnSpanFull()
-                                            ->required()
-                                            ->live(),
-                                        Repeater::make('riwayat_pesantren')
-                                            ->label('Riwayat Pendidikan Pondok Pesantren')
+                                        GridHeading::make()
                                             ->schema([
-                                                TextInput::make('nama_pesantren')
-                                                    ->label('Nama Pondok Pesantren')
-                                                    ->required(),
-                                                TextInput::make('daerah')
-                                                    ->label('Daerah')
-                                                    ->required(),
-                                                Grid::make()
-                                                    ->schema([
-                                                        TextInput::make('tahun_masuk')
-                                                            ->label('Tahun Masuk')
-                                                            ->required(),
-                                                        TextInput::make('tahun_lulus')
-                                                            ->label('Tahun Lulus'),
-                                                    ])->columns(2)
+                                                Select::make("pendidikan_terakhir")
+                                                    ->placeholder("Pilih pendidikan terakhir")
+                                                    ->options([
+                                                        "pondok pesantren" => "Pondok Pesantren",
+                                                        "sd" => "SD / Sederajat",
+                                                        "smp" => "SMP / Sederajat",
+                                                        "sma" => "SMA / Sederajat",
+                                                        "d3" => "D3",
+                                                        "s1" => "S1",
+                                                        "s2" => "S2",
+                                                        "s3" => "S3",
+                                                    ])
+                                                    ->required()
+                                                    ->label("Pendidikan Terakhir")
+                                                    ->native(false),
+                                                Select::make("penghasilan")
+                                                    ->placeholder("Pilih Penghasilan")
+                                                    ->options([
+                                                        "0" => "dibawah 1 Juta",
+                                                        "1" => "1,1 Juta - 2,5 Juta",
+                                                        "2" => "2,6 Juta - 5 Juta",
+                                                        "3" => "5,1 Juta - 7,5 Juta",
+                                                        "4" => "7,6 Juta - 10 Juta",
+                                                        "5" => "10,1 Juta Keatas",
+
+                                                    ])
+                                                    ->required()
+                                                    ->label("Penghasilan /bulan")
+                                                    ->native(false)
                                             ])
-                                            ->itemLabel(fn(array $state) => $state["nama_pesantren"] ?? null)
-                                            ->addAction(fn(Action $action) => $action->label("Tambah")->icon("heroicon-o-plus")->extraAttributes([
-                                                "class" => "ml-auto"
-                                            ]))
-                                            ->live()
-                                            ->collapsible()
-
-                                            ->columnSpanFull()
-                                            ->hidden(function (Get $get) {
-                                                if ($get("isPesantren") === "pernah") {
-                                                    return false;
-                                                }
-                                                return true;
-                                            })
-                                            ->defaultItems(1),
-
-                                    ])
-                                    ->columns(2),
-                                GridHeading::make()
-                                    ->schema([
-
-                                        Repeater::make('riwayat_pendidikan')
-                                            ->label('Riwayat Pendidikan Formal')
+                                            ->columns(2),
+                                        GridHeading::make()
                                             ->schema([
-                                                TextInput::make('nama_sekolah')
-                                                    ->label('Nama Sekolah / Perguruan Tinggi')
-                                                    ->required(),
-                                                TextInput::make('jurusan')
-                                                    ->label('Jurusan / Prodi')
-                                                    ->required(),
-                                                Grid::make()
+                                                Radio::make('isPesantren')
+                                                    ->options([
+                                                        'pernah' => 'Pernah',
+                                                        'belum pernah' => 'Belum Pernah',
+                                                    ])
+                                                    ->label("Apakah pernah belajar dan mengaji di Pondok Pesantren?")
+                                                    ->columnSpanFull()
+                                                    ->required()
+                                                    ->live(),
+                                                Repeater::make('riwayat_pesantren')
+                                                    ->label('Riwayat Pendidikan Pondok Pesantren')
                                                     ->schema([
-                                                        TextInput::make('tahun_masuk')
-                                                            ->label('Tahun Masuk')
+                                                        TextInput::make('nama_pesantren')
+                                                            ->label('Nama Pondok Pesantren')
                                                             ->required(),
-                                                        TextInput::make('tahun_lulus')
-                                                            ->label('Tahun Lulus'),
-                                                    ])->columns(2)
-                                            ])
-                                            ->itemLabel(fn(array $state) => $state["nama_sekolah"] ?? null)
-                                            ->addAction(fn(Action $action) => $action->label("Tambah")->icon("heroicon-o-plus")->extraAttributes([
-                                                "class" => "ml-auto"
-                                            ]))
-                                            ->live()
-                                            ->collapsed(true)
-                                            ->defaultItems(0)
-                                            ->collapsible()
-                                            ->columnSpanFull()
+                                                        TextInput::make('daerah')
+                                                            ->label('Daerah')
+                                                            ->required(),
+                                                        Grid::make()
+                                                            ->schema([
+                                                                TextInput::make('tahun_masuk')
+                                                                    ->label('Tahun Masuk')
+                                                                    ->required(),
+                                                                TextInput::make('tahun_lulus')
+                                                                    ->label('Tahun Lulus'),
+                                                            ])->columns(2)
+                                                    ])
+                                                    ->itemLabel(fn(array $state) => $state["nama_pesantren"] ?? null)
+                                                    ->addAction(fn(Action $action) => $action->label("Tambah")->icon("heroicon-o-plus")->extraAttributes([
+                                                        "class" => "ml-auto"
+                                                    ]))
+                                                    ->live()
+                                                    ->collapsible()
 
-                                        // RepeaterCustom::make("riwayat_pendidikan")
-                                        //     ->label('Riwayat Pendidikan Formal')
-                                        //     ->schema([
-                                        //         TextInput::make('nama_sekolah')
-                                        //             ->label('Nama Sekolah / Perguruan Tinggi')
-                                        //             ->required(),
-                                        //         TextInput::make('jurusan')
-                                        //             ->label('Jurusan / Prodi')
-                                        //             ->required(),
-                                        //         Grid::make()
-                                        //             ->schema([
-                                        //                 TextInput::make('tahun_masuk')
-                                        //                     ->label('Tahun Masuk')
-                                        //                     ->required(),
-                                        //                 TextInput::make('tahun_lulus')
-                                        //                     ->label('Tahun Lulus'),
-                                        //             ])->columns(2)
-                                        //     ])
-                                        //     ->columnSpanFull()
+                                                    ->columnSpanFull()
+                                                    ->hidden(function (Get $get) {
+                                                        if ($get("isPesantren") === "pernah") {
+                                                            return false;
+                                                        }
+                                                        return true;
+                                                    })
+                                                    ->defaultItems(1),
+
+                                            ])
+                                            ->columns(2),
+                                        GridHeading::make()
+                                            ->schema([
+                                                Repeater::make('riwayat_pendidikan')
+                                                    ->label('Riwayat Pendidikan Formal')
+                                                    ->schema([
+                                                        TextInput::make('nama_sekolah')
+                                                            ->label('Nama Sekolah / Perguruan Tinggi')
+                                                            ->required(),
+                                                        TextInput::make('jurusan')
+                                                            ->label('Jurusan / Prodi'),
+                                                        Grid::make()
+                                                            ->schema([
+                                                                TextInput::make('tahun_masuk')
+                                                                    ->label('Tahun Masuk')
+                                                                    ->required(),
+                                                                TextInput::make('tahun_lulus')
+                                                                    ->label('Tahun Lulus'),
+                                                            ])->columns(2)
+                                                    ])
+                                                    ->itemLabel(fn(array $state) => $state["nama_sekolah"] ?? null)
+                                                    ->addAction(fn(Action $action) => $action->label("Tambah")->icon("heroicon-o-plus")->extraAttributes([
+                                                        "class" => "ml-auto"
+                                                    ]))
+                                                    ->live()
+                                                    ->collapsed(true)
+                                                    ->defaultItems(0)
+                                                    ->collapsible()
+                                                    ->columnSpanFull()
+                                            ])
+                                            ->columns(2)
 
                                     ])
-                                    ->columns(2)
-
                             ])->columnSpanFull()
                     ])
 
@@ -377,19 +370,22 @@ class CreateJamaahMwcnu extends Page implements HasForms
                                     ->required()
                                     ->imageEditor()
                                     ->directory("images/profile")
+                                    ->optimize("webp")
                                     ->maxSize(2048)
                                     ->hiddenLabel(true)
                                     ->extraAttributes([
-                                        "class" => "w-full flex justify-center"
+                                        "class" => "w-full flex items-center justify-center"
                                     ])
                             ])->columns(1),
                         Section::make("Foto KTP")
+                            ->relationship("detail")
                             ->schema([
                                 FileUpload::make('foto_ktp')
                                     ->image()
                                     ->required()
                                     ->imageEditor()
                                     ->directory("images/ktp")
+                                    ->optimize("webp")
                                     ->maxSize(2048)
                                     ->hiddenLabel(true)
                                     ->extraAttributes([
@@ -501,17 +497,7 @@ class CreateJamaahMwcnu extends Page implements HasForms
                                             ->icon("heroicon-o-plus");
                                     })
                             ]),
-                        Actions::make([
-                            Action::make("submit")
-                                ->label("Buat Jamaah")
-                                ->submit(true)
-                                ->size(ActionSize::ExtraLarge)
-                                ->extraAttributes([
-                                    "class" => "w-full"
-                                ])
 
-
-                        ])->columnSpanFull()
 
                     ])
                     ->columnSpan([
@@ -542,12 +528,12 @@ class CreateJamaahMwcnu extends Page implements HasForms
                 "profile_picture" => $state["profile_picture"] ?? "",
                 "kepengurusan" => $state["kepengurusan"] ?? "",
                 "jabatan_kepengurusan" => $state["jabatan_kepengurusan"] ?? "",
-                "alamat_lengkap" => json_encode([
-                    "provinsi" => $state["provinsi"],
-                    "kota" => $state["kota"],
-                    "kecamatan" => $state["kecamatan"],
-                    "desa" => $state["desa"],
-                ]),
+                // "alamat_lengkap" => json_encode([
+                //     "provinsi" => $state["provinsi"],
+                //     "kota" => $state["kota"],
+                //     "kecamatan" => $state["kecamatan"],
+                //     "desa" => $state["desa"],
+                // ]),
                 "mwcnu_id" => $this->record,
             ];
 

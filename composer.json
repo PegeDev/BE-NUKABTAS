@@ -17,6 +17,7 @@
         "filament/filament": "3.2.109",
         "guzzlehttp/guzzle": "^7.2",
         "itsmalikjones/blade-iconic": "^1.3",
+        "joshembling/image-optimizer": "^1.4",
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",

@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('detail_jemaahs', function (Blueprint $table) {
-            $table->string("status_pernikahan");
+        Schema::table('jemaahs', function (Blueprint $table) {
+            $table->dropColumn("alamat_lengkap");
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('detail_jemaahs', function (Blueprint $table) {
+        Schema::table('jemaahs', function (Blueprint $table) {
             //
         });
     }

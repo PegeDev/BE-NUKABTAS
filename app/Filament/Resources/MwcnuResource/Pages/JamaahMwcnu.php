@@ -128,12 +128,12 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
                     ->color('info')
                     ->size(ActionSize::Large)
                     ->action(
-                        fn() => Excel::download(new JamaahExport($this->record->jemaahs), "Jamaah-{$this->record->nama_kecamatan}.xlsx")
+                        fn() => Excel::download(new JamaahExport($this->record->jemaahs), "Warga-{$this->record->nama_kecamatan}.xlsx")
                     ),
 
                 ActionGroup::make([
-                    Action::make("buat_peserta")
-                        ->label("Buat Peserta baru")
+                    Action::make("buat_warga")
+                        ->label("Buat Warga baru")
                         ->icon("heroicon-o-user-plus")
                         ->url(function () {
                             return route('filament.dashboard.resources.data-kecamatan.create-jamaah', ['record' => $this->record]);
@@ -159,7 +159,7 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
                 ])
                     ->button()
                     ->size(ActionSize::Large)
-                    ->label("Tambah Jamaah")
+                    ->label("Tambah Warga")
                     ->icon("heroicon-o-plus")
                     ->dropdownPlacement('bottom-end')
             ]);

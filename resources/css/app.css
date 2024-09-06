@@ -86,6 +86,9 @@ input.fi-fo-repeater-item {
     @apply ;
 } */
 
-input {
-    @apply disabled:bg-slate-100 disabled:cursor-not-allowed;
-}
+/* input[type="text"],
+input[type="email"],
+input[type="number"],
+select {
+    @apply read-only:bg-slate-100 read-only:cursor-not-allowed;
+} */
