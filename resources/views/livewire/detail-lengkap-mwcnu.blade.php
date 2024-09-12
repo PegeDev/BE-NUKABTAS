@@ -150,7 +150,7 @@ use Illuminate\Support\Carbon;
                         App\Enums\MwcnuStatus::DISETUJUI,
                         '--c-100:var(--warning-100);--c-400:var(--warning-400);--c-600:var(--warning-600);' =>
                         $item->status === App\Enums\MwcnuStatus::DITINJAU])
-                        @class(["fi-color-custom !bg-custom-100 !text-custom-600 !ring-custom-600/10"])
+                        @class(["fi-color-custom bg-custom-100 text-custom-600 ring-custom-600/10"])
                         >
                         <x-slot name="heading" class="text-sm">
                             <div class="flex items-center justify-between">
