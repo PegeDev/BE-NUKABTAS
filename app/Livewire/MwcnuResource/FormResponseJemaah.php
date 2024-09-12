@@ -467,7 +467,6 @@ class FormResponseJemaah extends Component implements HasForms
                                 CheckboxList::make('accept')
                                     ->options([
                                         '1' => 'Saya setuju dan sudah mengisi data pendaftaran jamaah',
-                                        '2' => 'Saya bersedia membayar infaq yang ditentukan oleh panitia',
                                     ])
                                     ->required()
                                     ->live()
@@ -477,7 +476,7 @@ class FormResponseJemaah extends Component implements HasForms
                                         ->label("Daftar")
                                         ->submit(true)
                                         ->disabled(function (Get $get) {
-                                            if (in_array("1", $get("accept")) && in_array("2", $get("accept"))) {
+                                            if (in_array("1", $get("accept"))) {
                                                 return false;
                                             } else {
                                                 return true;
