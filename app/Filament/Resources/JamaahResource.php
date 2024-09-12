@@ -611,7 +611,7 @@ class JamaahResource extends Resource implements HasShieldPermissions
         return [
             'index' => Pages\ListJamaahs::route('/'),
             'edit' => Pages\EditJamaah::route('/{record}/edit'),
-            "detail" => Pages\DetailJamaah::route('/{record}'),
+            "detail" => Pages\DetailWarga::route('/{record}'),
         ];
     }
 }

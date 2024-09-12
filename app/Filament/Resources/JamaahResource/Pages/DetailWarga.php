@@ -6,7 +6,7 @@ use App\Filament\Resources\JamaahResource;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
-class DetailJamaah extends ViewRecord
+class DetailWarga extends ViewRecord
 {
     protected static string $resource = JamaahResource::class;
 
