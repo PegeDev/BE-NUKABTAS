@@ -15,6 +15,9 @@ return new class extends Migration
             $table->string("status_pernikahan")->nullable();
             $table->string("kepengurusan")->nullable();
             $table->string("jabatan_kepengurusan")->nullable();
+            $table->string("pekerjaan")->nullable();
+            $table->string('penghasilan')->nullable();
+            $table->string('pendidikan_terakhir')->nullable();
         });
     }
 
@@ -24,7 +27,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('jemaahs', function (Blueprint $table) {
-            //
+            $table->dropIfExists("status_pernikahan");
         });
     }
 };

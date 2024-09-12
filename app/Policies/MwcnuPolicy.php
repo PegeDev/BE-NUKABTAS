@@ -21,7 +21,7 @@ class MwcnuPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Mwcnu $mwcnu): bool
+    public function view(User $user): bool
     {
         return $user->can('view_mwcnu');
     }
@@ -29,9 +29,9 @@ class MwcnuPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Mwcnu $mwcnu): bool
     {
-        return $user->can('create_mwcnu');
+        return $user->can('create_mwcnu') && $user->id === $mwcnu->admin_id;;
     }
 
     /**
@@ -39,7 +39,7 @@ class MwcnuPolicy
      */
     public function update(User $user, Mwcnu $mwcnu): bool
     {
-        return $user->can('update_mwcnu');
+        return $user->can('update_mwcnu') && $user->id === $mwcnu->admin_id;
     }
 
     /**
@@ -47,7 +47,7 @@ class MwcnuPolicy
      */
     public function delete(User $user, Mwcnu $mwcnu): bool
     {
-        return $user->can('delete_mwcnu');
+        return $user->can('delete_mwcnu') && $user->id === $mwcnu->admin_id;
     }
 
     /**
@@ -58,20 +58,20 @@ class MwcnuPolicy
         return $user->can('delete_any_mwcnu');
     }
 
-    public function import(User $user): bool
+    public function import(User $user, Mwcnu $mwcnu): bool
     {
-        return $user->can('import_mwcnu');
+        return $user->can('import_mwcnu') && $user->id === $mwcnu->admin_id;
     }
 
-    public function manageAdmin(User $user): bool
+    public function manageAdmin(User $user, Mwcnu $mwcnu): bool
     {
-        return $user->can('manage_admin_mwcnu');
+        return $user->can('manage_admin_mwcnu') && $user->id === $mwcnu->admin_id;
     }
 
     /**
      * Determine whether the user can permanently delete.
      */
-    public function forceDelete(User $user, Mwcnu $mwcnu): bool
+    public function forceDelete(User $user): bool
     {
         return $user->can('{{ ForceDelete }}');
     }
@@ -87,7 +87,7 @@ class MwcnuPolicy
     /**
      * Determine whether the user can restore.
      */
-    public function restore(User $user, Mwcnu $mwcnu): bool
+    public function restore(User $user): bool
     {
         return $user->can('{{ Restore }}');
     }
@@ -103,7 +103,7 @@ class MwcnuPolicy
     /**
      * Determine whether the user can replicate.
      */
-    public function replicate(User $user, Mwcnu $mwcnu): bool
+    public function replicate(User $user): bool
     {
         return $user->can('{{ Replicate }}');
     }

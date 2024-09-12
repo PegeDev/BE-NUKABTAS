@@ -18,8 +18,6 @@ class AlamatJemaah extends Model
         'jemaah_id',
     ];
 
-
-
     public function jemaah()
     {
         return $this->belongsTo(Jemaah::class);
@@ -27,19 +25,19 @@ class AlamatJemaah extends Model
 
     public function provinsi()
     {
-        return $this->belongsTo(Province::class);
+        return $this->belongsTo(Province::class, 'provinsi', 'code');
     }
 
     public function kota()
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(City::class, 'kota', 'code');
     }
     public function kecamatan()
     {
-        return $this->belongsTo(District::class);
+        return $this->belongsTo(District::class, 'kecamatan', 'code');
     }
     public function desa()
     {
-        return $this->belongsTo(Village::class);
+        return $this->belongsTo(Village::class, 'desa', 'code');
     }
 }

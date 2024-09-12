@@ -18,12 +18,8 @@ class EditJamaah extends EditRecord
         return $data;
     }
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            // Actions\DeleteAction::make(),
-        ];
-    }
+
+
     protected function getSavedNotificationTitle(): ?string
     {
         return 'Warga berhasil diubah!';

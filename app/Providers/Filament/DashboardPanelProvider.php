@@ -22,10 +22,6 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Filament\View\PanelsRenderHook;
-use Illuminate\Contracts\View\View as ContractsViewView;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\View\View as ViewView;
 
 class DashboardPanelProvider extends PanelProvider
 {
@@ -41,6 +37,7 @@ class DashboardPanelProvider extends PanelProvider
             ->login()
             ->colors([
                 "primary" => Color::hex("#076857"),
+                "gray" => Color::Slate
             ])
 
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
@@ -73,6 +70,7 @@ class DashboardPanelProvider extends PanelProvider
 
             ])
             ->spa()
+            ->unsavedChangesAlerts()
             ->sidebarCollapsibleOnDesktop()
             ->collapsedSidebarWidth('10rem')
             ->sidebarWidth('20rem')

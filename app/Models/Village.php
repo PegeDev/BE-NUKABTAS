@@ -11,8 +11,8 @@ class Village extends ModelsVillage
 {
     use HasFactory;
 
-    public function alamat_jemaah(): HasMany
+    public function alamat_jemaah(): HasOne
     {
-        return $this->hasMany(AlamatJemaah::class, "desa");
+        return $this->hasOne(AlamatJemaah::class, "desa", "code");
     }
 }

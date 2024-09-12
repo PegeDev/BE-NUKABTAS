@@ -35,6 +35,7 @@ use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\TextColumn\TextColumnSize;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\DB;
 use Laravolt\Indonesia\Models\City;
 use Laravolt\Indonesia\Models\District;
 use Laravolt\Indonesia\Models\Province;
@@ -114,9 +115,8 @@ class JamaahResource extends Resource implements HasShieldPermissions
                                             ->label("Alamat Email"),
                                         TextInput::make("telp")
                                             ->required()
-                                            ->prefix("+62")
                                             ->tel()
-                                            ->mask("999 9999 99999")
+                                            ->mask("9999 9999 99999")
                                             ->placeholder("Nomor Handphone")
                                             ->label("Nomor Handphone"),
                                     ])
@@ -134,16 +134,49 @@ class JamaahResource extends Resource implements HasShieldPermissions
                                             ])
                                             ->required()
                                             ->inlineLabel(false),
+                                        Select::make("pendidikan_terakhir")
+                                            ->placeholder("Pilih pendidikan terakhir")
+                                            ->options([
+                                                "pondok pesantren" => "Pondok Pesantren",
+                                                "sd" => "SD / Sederajat",
+                                                "smp" => "SMP / Sederajat",
+                                                "sma" => "SMA / Sederajat",
+                                                "d3" => "D3",
+                                                "s1" => "S1",
+                                                "s2" => "S2",
+                                                "s3" => "S3",
+                                            ])
+                                            ->required()
+                                            ->label("Pendidikan Terakhir")
+                                            ->native(false),
+                                    ])
+                                    ->columns(2),
+                                Grid::make()
+                                    ->schema([
                                         Group::make()
-                                            ->relationship("detail")
                                             ->schema([
                                                 TextInput::make("pekerjaan")
                                                     ->required()
                                                     ->placeholder("Dosen, wiraswasta, dll.")
                                                     ->label("Pekerjaan"),
-                                            ])
-                                    ])
-                                    ->columns(2),
+                                                Select::make("penghasilan")
+                                                    ->placeholder("Pilih Penghasilan")
+                                                    ->options([
+                                                        "0" => "dibawah 1 Juta",
+                                                        "1" => "1,1 Juta - 2,5 Juta",
+                                                        "2" => "2,6 Juta - 5 Juta",
+                                                        "3" => "5,1 Juta - 7,5 Juta",
+                                                        "4" => "7,6 Juta - 10 Juta",
+                                                        "5" => "10,1 Juta Keatas",
+
+                                                    ])
+                                                    ->required()
+                                                    ->label("Penghasilan /bulan")
+                                                    ->native(false),
+
+                                            ])->columns(2)
+
+                                    ])->columns(1),
                                 GridHeading::make()
                                     ->schema([
                                         Group::make()
@@ -160,11 +193,7 @@ class JamaahResource extends Resource implements HasShieldPermissions
                                                                 return $component->state("32");
                                                             })
                                                             ->required()
-                                                            ->extraAttributes(
-                                                                function (Page $livewire) {
-                                                                    return ["readonly" => $livewire instanceof EditJamaah];
-                                                                }
-                                                            )
+                                                            ->extraAttributes(["readonly" => "readonly"])
                                                             ->default("32")
                                                             ->placeholder("Pilih Provinsi")
                                                             ->live(),
@@ -208,8 +237,9 @@ class JamaahResource extends Resource implements HasShieldPermissions
                                                     ->columns(2),
                                             ]),
                                         Grid::make()
-                                            ->relationship("detail")
+                                            ->relationship("detail_jemaah")
                                             ->schema([
+
                                                 Textarea::make('alamat_detail')
                                                     ->required()
                                                     ->label("Alamat Lengkap")
@@ -233,43 +263,10 @@ class JamaahResource extends Resource implements HasShieldPermissions
                                             ->label("Jabatan Kepengurusan"),
                                     ])
                                     ->columns(2),
-                                Group::make()
-                                    ->relationship("detail")
+                                GridHeading::make()
                                     ->schema([
-                                        GridHeading::make()
-                                            ->schema([
-                                                Select::make("pendidikan_terakhir")
-                                                    ->placeholder("Pilih pendidikan terakhir")
-                                                    ->options([
-                                                        "pondok pesantren" => "Pondok Pesantren",
-                                                        "sd" => "SD / Sederajat",
-                                                        "smp" => "SMP / Sederajat",
-                                                        "sma" => "SMA / Sederajat",
-                                                        "d3" => "D3",
-                                                        "s1" => "S1",
-                                                        "s2" => "S2",
-                                                        "s3" => "S3",
-                                                    ])
-                                                    ->required()
-                                                    ->label("Pendidikan Terakhir")
-                                                    ->native(false),
-                                                Select::make("penghasilan")
-                                                    ->placeholder("Pilih Penghasilan")
-                                                    ->options([
-                                                        "0" => "dibawah 1 Juta",
-                                                        "1" => "1,1 Juta - 2,5 Juta",
-                                                        "2" => "2,6 Juta - 5 Juta",
-                                                        "3" => "5,1 Juta - 7,5 Juta",
-                                                        "4" => "7,6 Juta - 10 Juta",
-                                                        "5" => "10,1 Juta Keatas",
-
-                                                    ])
-                                                    ->required()
-                                                    ->label("Penghasilan /bulan")
-                                                    ->native(false)
-                                            ])
-                                            ->columns(2),
-                                        GridHeading::make()
+                                        Group::make()
+                                            ->relationship("detail_jemaah")
                                             ->schema([
                                                 Radio::make('isPesantren')
                                                     ->options([
@@ -315,15 +312,18 @@ class JamaahResource extends Resource implements HasShieldPermissions
                                                         return true;
                                                     })
                                                     ->defaultItems(1),
+                                            ])->columnSpanFull()
 
-                                            ])
-                                            ->columns(2),
-                                        GridHeading::make()
+                                    ])
+                                    ->columns(2),
+                                GridHeading::make()
+                                    ->schema([
+                                        Group::make()
+                                            ->relationship("detail_jemaah")
                                             ->schema([
                                                 Repeater::make('riwayat_pendidikan')
                                                     ->label('Riwayat Pendidikan Formal')
                                                     ->reorderable(false)
-                                                    ->required()
                                                     ->schema([
                                                         TextInput::make('nama_sekolah')
                                                             ->label('Nama Sekolah / Perguruan Tinggi')
@@ -348,10 +348,10 @@ class JamaahResource extends Resource implements HasShieldPermissions
                                                     ->defaultItems(0)
                                                     ->collapsible()
                                                     ->columnSpanFull()
-                                            ])
-                                            ->columns(2)
-
+                                            ])->columnSpanFull()
                                     ])
+                                    ->columns(2)
+
                             ])->columnSpanFull()
                     ])
 
@@ -377,7 +377,7 @@ class JamaahResource extends Resource implements HasShieldPermissions
                                     ])
                             ])->columns(1),
                         Section::make("Foto KTP")
-                            ->relationship("detail")
+                            ->relationship("detail_jemaah")
                             ->schema([
                                 FileUpload::make('foto_ktp')
                                     ->image()
@@ -528,14 +528,14 @@ class JamaahResource extends Resource implements HasShieldPermissions
                     ->size(TextColumnSize::Small),
                 TextColumn::make('alamat_jemaah')
                     ->formatStateUsing(function ($state) {
-                        return Str::title(Province::where("code", $state->provinsi)->first()->name);
+                        return Str::title($state->provinsi()->first()->name);
                     })
                     ->description(function ($state) {
-                        $findCity =  $state ? City::where("code", $state->kota)->first()->name : "-";
-                        $findDistrict =  $state ? District::where("code", $state->kecamatan)->first()->name : "-";
-                        // dd($findCity);
-                        return Str::title($findCity . ", " .  $findDistrict);
+                        $findCity =  $state ? $state->kota()->first()->name : null;
+                        $findDistrict =   $state ? $state->kecamatan()->first()->name : null;
+                        return Str::title($findDistrict  . ", " .  $findCity);
                     })
+                    ->placeholder("-")
                     ->weight(FontWeight::SemiBold)
                     ->label("ALAMAT")
                     ->size(TextColumnSize::Small),
@@ -551,11 +551,12 @@ class JamaahResource extends Resource implements HasShieldPermissions
                     ->weight(FontWeight::SemiBold)
                     ->label("KEPENGURUSAN")
                     ->size(TextColumnSize::Small),
-                TextColumn::make("detail.pekerjaan")
+                TextColumn::make("pekerjaan")
                     ->formatStateUsing(function ($state) {
 
-                        return $state ? Str::title($state) : "-";
+                        return Str::title($state);
                     })
+                    ->placeholder("-")
                     ->label("PEKERJAAN")
             ])
             ->recordUrl(fn(Jemaah $record): string => self::getUrl('detail', ['record' => $record->id]))
@@ -576,6 +577,7 @@ class JamaahResource extends Resource implements HasShieldPermissions
                 ])
                     ->label("Action")
             ])
+            ->striped()
             ->headerActions([])
             ->groupedBulkActions([
                 // Tables\Actions\BulkActionGroup::make([

@@ -3,8 +3,6 @@
 namespace App\Filament\Resources\JamaahResource\Pages;
 
 use App\Filament\Resources\JamaahResource;
-use Filament\Actions;
-use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
@@ -20,6 +18,7 @@ class DetailJamaah extends ViewRecord
         return [
             EditAction::make("edit")
                 ->label("Edit Detail")
+                ->visible(auth()->user()->id === $this->record->mwcnu->admin_id && auth()->user()->can("update_jamaah") || auth()->user()->hasRole('super_admin'))
                 ->icon("heroicon-o-pencil-square")
         ];
     }

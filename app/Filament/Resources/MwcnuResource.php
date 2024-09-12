@@ -31,7 +31,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Maatwebsite\Excel\Facades\Excel;
 
 class MwcnuResource extends Resource implements HasShieldPermissions
@@ -77,11 +76,9 @@ class MwcnuResource extends Resource implements HasShieldPermissions
                                             ->label("Nama Ketua"),
                                         TextInput::make("telp_ketua")
                                             ->placeholder("Nomor Telepon / Whatsapp")
-                                            ->prefix("+62")
-                                            ->mask("999 9999 99999")
+                                            ->mask("9999-9999-99999")
                                             ->required()
                                             ->tel()
-                                            ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')
                                             ->label("Nomor Telp. Ketua"),
 
                                     ]),
@@ -126,12 +123,10 @@ class MwcnuResource extends Resource implements HasShieldPermissions
                                             ->placeholder("Nama Lengkap Admin")
                                             ->required(),
                                         TextInput::make("telp_admin")
-                                            ->placeholder("Nomor Telepon / Whatsapp Admin")
-                                            ->prefix("+62")
-                                            ->mask("999 9999 99999")
+                                            ->placeholder("Nomor Telepon / Whatsapp")
+                                            ->mask("9999-9999-99999")
                                             ->required()
                                             ->tel()
-                                            ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')
                                             ->label("Nomor Telp. Admin")
                                     ]),
                                 Grid::make()
@@ -142,7 +137,7 @@ class MwcnuResource extends Resource implements HasShieldPermissions
                                             ->maxSize(2048)
                                             ->directory("surat_tugas")
                                             ->getUploadedFileNameForStorageUsing(
-                                                fn(Get $get): string => (string) str("Surat-Tugas-Admin-" . Str::slug($get("nama_admin")) . ".pdf"),
+                                                fn(Get $get): string => (string) Str::slug("Surat-Tugas-Admin-" . $get("nama_admin")) . ".pdf",
                                             )
                                             ->acceptedFileTypes(["application/pdf"])
                                             ->required(),
@@ -170,25 +165,24 @@ class MwcnuResource extends Resource implements HasShieldPermissions
                 TextColumn::make("nama_kecamatan")
                     ->label("Kecamatan")
                     ->disabled(true),
-                // TextColumn::make("jamaah_count")
-                //     ->counts("jemaahs")
-                //     ->numeric()
-                //     ->badge()
-                //     ->label("Jamaah"),
+                TextColumn::make('jemaahs_count')
+                    ->counts('jemaahs')
+                    ->label("Total Warga")
+                    ->placeholder("0")
+                    ->badge(),
                 TextColumn::make("user.name")
                     ->label("Admin")
                     ->badge()
                     ->placeholder('admin belum dibuat')
                     ->visible(auth()->user()->can("manage_admin_mwcnu")),
-                TextColumn::make("status.status")
+                TextColumn::make("current_status.status")
                     ->badge()
-                    ->color(fn(string $state): string =>  match (Str::lower($state)) {
-                        'ditinjau' => 'warning',
-                        'disetujui' => 'success',
-                    })
-                    ->formatStateUsing(fn($state) => Str::upper($state))
+                    ->color(fn($state) => $state->getColor())
+                    ->placeholder('-')
+                    ->formatStateUsing(fn($state) => Str::upper($state->getLabel()))
                     ->label("Status"),
             ])
+            ->striped()
             ->filters([
                 //
             ])
@@ -232,7 +226,7 @@ class MwcnuResource extends Resource implements HasShieldPermissions
                                             ->action(function (Mwcnu $record) {
                                                 $user = $record->user()->create([
                                                     "name" => "Kecamatan " . $record->nama_kecamatan,
-                                                    "email" => "kec_" . Str::lower($record->nama_kecamatan) . "@nukabtas.or.id",
+                                                    "email" => "mwc_" . Str::lower(Str::slug($record->nama_kecamatan)) . "@nukabtas.or.id",
                                                     "profile_picture" => "",
                                                     "email_verified_at" => now(),
                                                     "password" => Hash::make("password"),
@@ -314,9 +308,7 @@ class MwcnuResource extends Resource implements HasShieldPermissions
                     ->icon("heroicon-o-ellipsis-vertical")
 
             ])
-            ->recordUrl(
-                fn(Mwcnu $record): string => route('filament.dashboard.resources.data-kecamatan.detail', ['record' => $record]),
-            )
+            ->recordUrl(fn(Mwcnu $record) => self::getUrl("detail", ["record" => $record]))
             ->groupedBulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -354,9 +346,10 @@ class MwcnuResource extends Resource implements HasShieldPermissions
             'index' => Pages\ListMwcnus::route('/'),
             'create' => Pages\CreateMwcnu::route('/create'),
             'edit' => Pages\EditMwcnu::route('/{record}/edit'),
-            'detail' => Pages\ViewMwcnu::route('/{record}'),
-            'jamaah' => Pages\JamaahMwcnu::route('/{record}?state=warga'),
-            'create-jamaah' => Pages\CreateJamaahMwcnu::route('/{record}/create-jamaah'),
+            'detail' => Pages\DetailMwcnu::route('/{record}'),
+            'warga' => Pages\JamaahMwcnu::route('/{record}?state=warga'),
+            "pengurus" => Pages\PengurusMwcnu::route('/{record}/?state=kepengurusan'),
+            'buat-warga' => Pages\CreateJamaahMwcnu::route('/{record}/buat-warga'),
         ];
     }
 }

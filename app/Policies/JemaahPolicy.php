@@ -21,7 +21,7 @@ class JemaahPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Jemaah $jemaah): bool
+    public function view(User $user): bool
     {
         return $user->can('view_jamaah');
     }
@@ -47,21 +47,21 @@ class JemaahPolicy
      */
     public function delete(User $user, Jemaah $jemaah): bool
     {
-        return $user->can('delete_jamaah');
+        return $user->can('delete_jamaah') && $user->id === $jemaah->mwcnu->admin_id;
     }
 
     /**
      * Determine whether the user can bulk delete.
      */
-    public function deleteAny(User $user): bool
+    public function deleteAny(User $user, Jemaah $jemaah): bool
     {
-        return $user->can('delete_any_jamaah');
+        return $user->can('delete_any_jamaah') && $user->id === $jemaah->mwcnu->admin_id;
     }
 
     /**
      * Determine whether the user can permanently delete.
      */
-    public function forceDelete(User $user, Jemaah $jemaah): bool
+    public function forceDelete(User $user): bool
     {
         return $user->can('{{ ForceDelete }}');
     }
@@ -77,7 +77,7 @@ class JemaahPolicy
     /**
      * Determine whether the user can restore.
      */
-    public function restore(User $user, Jemaah $jemaah): bool
+    public function restore(User $user): bool
     {
         return $user->can('{{ Restore }}');
     }
@@ -93,7 +93,7 @@ class JemaahPolicy
     /**
      * Determine whether the user can replicate.
      */
-    public function replicate(User $user, Jemaah $jemaah): bool
+    public function replicate(User $user): bool
     {
         return $user->can('{{ Replicate }}');
     }

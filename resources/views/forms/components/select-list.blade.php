@@ -1,36 +1,7 @@
 <?php
-use Laravolt\Indonesia\Models\City;
-use Laravolt\Indonesia\Models\District;
-use Laravolt\Indonesia\Models\Province;
-use Laravolt\Indonesia\Models\Village;
+
 use Illuminate\Support\Str;
 
-$options = collect($getOptions())->map(function ($item) {
-    $decode = json_decode($item['alamat_lengkap'], true);
-
-    $province = Province::where('code', $decode['provinsi'])->first() ?? '';
-    $city = $province->cities->where('code', $decode['kota'])->first() ?? '';
-    $district = $city->districts->where('code', $decode['kecamatan'])->first() ?? '';
-
-    $profile = $item['profile_picture'];
-
-    if ($item['jenis_kelamin'] === 'laki-laki') {
-        $profile = '/avatar_male.png';
-    } else {
-        $profile = '/avatar_female.png';
-    }
-
-    return [
-        'id' => $item['id'],
-        'nama_lengkap' => $item['nama_lengkap'],
-        'profile_picture' => $profile,
-        'alamat_lengkap' => [
-            'provinsi' => Str::title($province->name),
-            'kota' => Str::title(preg_replace('/KABUPATEN/', 'Kab. ', $city->name)),
-            'kecamatan' => Str::title($district->name),
-        ],
-    ];
-});
 
 ?>
 
@@ -38,7 +9,7 @@ $options = collect($getOptions())->map(function ($item) {
     <div x-data="{
         state: $wire.$entangle('{{ $getStatePath() }}'),
         search: '',
-        filteredOptions: @js($options),
+        filteredOptions: @js($getOptions()),
         selectedOptions: [],
         filterOptions() {
             this.filteredOptions = @js($options).filter(option => {
@@ -53,7 +24,7 @@ $options = collect($getOptions())->map(function ($item) {
                 return !this.selectedOptions.some(selected => selected.id === option.id);
             });
             this.state = this.selectedOptions;
-            this.search = ''; // Clear search after selection
+            this.search = ''; 
         },
         removeOption(id) {
             this.selectedOptions = this.selectedOptions.filter(option => option.id !== id);
@@ -62,7 +33,7 @@ $options = collect($getOptions())->map(function ($item) {
             this.filteredOptions = @js($options);
         }
     }">
-        <x-filament::dropdown width="xl" placement="bottom-start" dismissable="true">
+        <x-filament::dropdown class="w-full" placement="bottom-start" dismissable="true">
             <x-slot name="trigger">
                 <x-filament::input.wrapper class="w-full ">
                     <x-filament::input x-model="search" x-on:input.debounce="filterOptions" placeholder="Search..." />
@@ -81,7 +52,7 @@ $options = collect($getOptions())->map(function ($item) {
                             <div class="flex flex-col gap-1">
                                 <p x-text="option.nama_lengkap" class="text-primary"></p>
                                 <div class="flex gap-0.5">
-                                    <p x-text="option.alamat_lengkap.kecamatan + ', ' + option.alamat_lengkap.kota + ', ' + option.alamat_lengkap.provinsi"
+                                    <p x-text="option.alamat_jemaah.kecamatan.name + ', ' + option.alamat_jemaah.kota + ', ' + option.alamat_jemaah.provinsi"
                                         class="text-xs"></p>
                                 </div>
                             </div>
@@ -124,5 +95,6 @@ $options = collect($getOptions())->map(function ($item) {
             </div>
 
         </template>
+
     </div>
 </x-dynamic-component>

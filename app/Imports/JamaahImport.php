@@ -7,6 +7,7 @@ use App\Models\Jemaah;
 use Carbon\Carbon;
 use Exception;
 use Filament\Actions\Concerns\InteractsWithRecord;
+use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -46,8 +47,12 @@ class JamaahImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
 
-        try {
+        $receipent = auth()->user();
 
+        try {
+            if ($row["nik"] === null) {
+                return null;
+            }
 
             $searchTerm = strtolower(str_replace(['.', ' '], '%', $row["kabkota"]));
 
@@ -68,52 +73,50 @@ class JamaahImport implements ToModel, WithHeadingRow
                 "email" => $row["email"],
                 "tempat_lahir" => $row["tempat_lahir"],
                 "tanggal_lahir" =>  Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row["tanggal_lahir"]))->format('d/m/Y'),
-                "profile_picture" => "",
                 "telp" => preg_replace("/0/", "62", $row["no_hp"]),
+                "profile_picture" => "",
                 "jenis_kelamin" => $row["jenis_kelamin_lp"] === "P" ? "perempuan" : "laki-laki",
-                "alamat_lengkap" => json_encode([
-                    "provinsi" => $province,
-                    "kota" => $city,
-                    "kecamatan" => $district,
-                    "desa" => $village
-                ]),
                 "kepengurusan" => $row["kepengurusan_di_nu"],
                 "jabatan_kepengurusan" => $row["jabatan_kepengurusan"],
                 "pendidikan_terakhir" => $row["pendidikan_terakhir"],
+                "penghasilan" =>  "0",
+                "pekerjaan" => "",
                 "mwcnu_id" => $this->record
             ];
 
-            // dd($formatted);
 
             $this->currentJemaah = Jemaah::firstOrCreate(
                 ["nik" => $formatted["nik"]],
                 $formatted
             );
 
+            $this->currentJemaah->alamat_jemaah()->updateOrCreate([
+                "provinsi" => $province,
+                "kota" => $city,
+                "kecamatan" => $district,
+                "desa" => $village,
+                "jemaah_id" => $this->currentJemaah->id
+            ]);
+
+
             $formatedDetailJemaah = [
-                "penghasilan" =>  "0",
-                "pekerjaan" => "",
                 "alamat_detail" => $row["alamat_lengkap"],
-                "pendidikan_terakhir" => $row["pendidikan_terakhir"],
-                "status_pernikahan" => $row["status_pernikahan"] ?? "",
                 "jemaah_id" => $this->currentJemaah->id,
             ];
 
-            $this->currentJemaah->detail()->updateOrCreate([
+            $this->currentJemaah->detail_jemaah()->updateOrCreate([
                 "jemaah_id" => $this->currentJemaah->id
             ], $formatedDetailJemaah);
 
-            Notification::make()
-                ->title("Data Jamaah berhasil diimport")
-                ->success()
-                ->send();
             return null;
         } catch (Exception $e) {
             Log::error("Error: " . $e->getMessage());
             Notification::make()
                 ->title("Data Jamaah gagal diimport!")
                 ->danger()
-                ->send();
+                ->body("Warga dengan NIK {$row["nik"]} gagal diimport. Silahkan hubungi admin. Error: " . $e->getMessage())
+                ->send()
+                ->sendToDatabase($receipent);
         }
     }
 }

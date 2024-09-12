@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\MwcnuStatus as EnumsMwcnuStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +13,11 @@ class MwcnuStatus extends Model
     protected $fillable = [
         "status",
         "message",
-        "mwcnu_id"
+        "mwcnu_id",
+    ];
+
+    protected $casts = [
+        "status" => EnumsMwcnuStatus::class
     ];
 
     public function mwcnu()

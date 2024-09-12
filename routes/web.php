@@ -1,11 +1,8 @@
 <?php
 
-use App\Filament\Pages\Auth\EditProfile;
-use App\Livewire\FormResponseJemaah;
+use App\Livewire\MwcnuResource\FormResponseJemaah;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,8 +25,6 @@ Route::get('/', function () {
 
 
 Route::get('/surat_tugas/{filename}', function ($filename) {
-    // Laravel is ignoring the header method and is sending a plain html/txt :(
-    // So a normal php header can do the workaround
     header("Content-type: application/pdf");
 
     $filename = "../public/storage/surat_tugas/" . $filename;

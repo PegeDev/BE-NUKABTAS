@@ -28,14 +28,13 @@ class Jemaah extends Model
         "kepengurusan",
         "jabatan_kepengurusan",
         "status_pernikahan",
+        "penghasilan",
+        "pekerjaan",
+        "pendidikan_terakhir",
         'mwcnu_id'
     ];
 
-
-
-
-
-    public function detail(): HasOne
+    public function detail_jemaah(): HasOne
     {
         return $this->hasOne(DetailJemaah::class);
     }
@@ -43,5 +42,15 @@ class Jemaah extends Model
     public function alamat_jemaah(): HasOne
     {
         return $this->hasOne(AlamatJemaah::class);
+    }
+
+    public function mwcnu(): BelongsTo
+    {
+        return $this->belongsTo(Mwcnu::class);
+    }
+
+    public function pengurus(): HasOne
+    {
+        return $this->hasOne(PengurusMwcnu::class);
     }
 }

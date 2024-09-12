@@ -2,12 +2,15 @@
 
 namespace App\Filament\Pages\Auth;
 
+use App\Filament\Resources\UserResource\Pages\CreateUser;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\Auth\EditProfile as BaseEditProfile;
+use Filament\Pages\Page;
+use Illuminate\Support\Facades\Hash;
 
 class EditProfile extends BaseEditProfile
 {
@@ -55,10 +58,12 @@ class EditProfile extends BaseEditProfile
                                     ->readOnly(true)
                                     ->label("Email"),
                                 TextInput::make('password')
-                                    ->inlineLabel(false)
-                                    ->revealable()
                                     ->password()
-                                    ->label("Kata Sandi Baru"),
+                                    ->revealable()
+                                    ->dehydrateStateUsing(fn($state) => Hash::make($state))
+                                    ->dehydrated(fn($state) => filled($state))
+                                    ->required(fn(Page $livewire) => ($livewire instanceof CreateUser))
+                                    ->maxLength(255),
 
                             ])
                     ]),

@@ -28,19 +28,16 @@ class JamaahExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        // dd($this->record->map((function ($order) {
-        //     return $order->detail->alamat_detail;
-        // })));
         return collect($this->record->map(function ($jemaah) {
 
-            $decodeAlamatLengkap = json_decode($jemaah->alamat_lengkap, true);
 
-            $province = Province::where("code", $decodeAlamatLengkap["provinsi"])->first()->name ?? "";
-            $city = City::where("code", $decodeAlamatLengkap["kota"])->first()->name ?? "";
-            $district =  District::where("code", $decodeAlamatLengkap["kecamatan"])->first()->name ?? "";
-            $village = Village::where("code", $decodeAlamatLengkap["desa"])->first()->name ?? "";
+            $province = $jemaah->alamat_jemaah ? Province::where("code", $jemaah->alamat_jemaah->provinsi)->first()->name : "";
+            $city = $jemaah->alamat_jemaah ? City::where("code",  $jemaah->alamat_jemaah->kota)->first()->name : "";
+            $district = $jemaah->alamat_jemaah ? District::where("code",  $jemaah->alamat_jemaah->kecamatan)->first()->name : "";
+            $village = $jemaah->alamat_jemaah ? Village::where("code",  $jemaah->alamat_jemaah->desa)->first()->name : "";
 
             return [
+                "Nama Lengkap" => (string) $jemaah->nama_lengkap,
                 "Nama Panggilan" => (string) $jemaah->nama_panggilan,
                 "NIK" => (string) $jemaah->nik,
                 "Email" => (string) $jemaah->email,
@@ -52,7 +49,7 @@ class JamaahExport implements FromCollection, WithHeadings
                 "Desa" => (string) $village,
                 "Kab/Kota" => (string) $city,
                 "Provinsi" => (string) $province,
-                "Alamat Lengkap" => (string) $jemaah->detail->alamat_detail,
+                "Alamat Lengkap" => (string) $jemaah->detail?->alamat_detail,
                 "Kepengurusan di NU" => (string) $jemaah->kepengurusan,
                 "Jabatan Kepengurusan" => (string) $jemaah->jabatan_kepengurusan,
             ];

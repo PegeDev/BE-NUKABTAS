@@ -13,9 +13,6 @@ return new class extends Migration
     {
         Schema::create('detail_jemaahs', function (Blueprint $table) {
             $table->id();
-            $table->string("penghasilan");
-            $table->string("pekerjaan");
-            $table->string("pendidikan_terakhir");
             $table->json("riwayat_pendidikan")->nullable();
             $table->json("riwayat_pesantren")->nullable();
             $table->string("foto_ktp")->nullable();

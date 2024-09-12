@@ -25,9 +25,10 @@ class Mwcnu extends Model
         return $this->hasMany(Jemaah::class);
     }
 
-    public function pengurus(): HasMany
+
+    public function kepengurusan(): HasOne
     {
-        return $this->hasMany(PengurusMwcnu::class);
+        return $this->hasOne(KepengurusanMwcnu::class);
     }
 
     public function form_mwcnu(): HasOne
@@ -48,5 +49,10 @@ class Mwcnu extends Model
     public function status(): HasMany
     {
         return $this->hasMany(MwcnuStatus::class);
+    }
+
+    public function current_status()
+    {
+        return $this->hasOne(MwcnuStatus::class)->latestOfMany();
     }
 }

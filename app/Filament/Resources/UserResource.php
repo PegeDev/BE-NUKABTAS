@@ -7,6 +7,7 @@ use App\Filament\Resources\UserResource\Pages\CreateUser;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -37,24 +38,28 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                DateTimePicker::make('email_verified_at')
-                    ->disabled(fn(Page $livewire) => $livewire instanceof CreateUser),
-                TextInput::make('password')
-                    ->password()
-                    ->dehydrateStateUsing(fn($state) => Hash::make($state))
-                    ->dehydrated(fn($state) => filled($state))
-                    ->required(fn(Page $livewire) => ($livewire instanceof CreateUser))
-                    ->maxLength(255),
-                Select::make("role")
-                    ->relationship("roles", "name")
+                Section::make()
+                    ->schema([
+                        TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('email')
+                            ->email()
+                            ->required()
+                            ->maxLength(255),
+                        DateTimePicker::make('email_verified_at')
+                            ->disabled(fn(Page $livewire) => $livewire instanceof CreateUser),
+                        TextInput::make('password')
+                            ->password()
+                            ->revealable()
+                            ->dehydrateStateUsing(fn($state) => Hash::make($state))
+                            ->dehydrated(fn($state) => filled($state))
+                            ->required(fn(Page $livewire) => ($livewire instanceof CreateUser))
+                            ->maxLength(255),
+                        Select::make("role")
+                            ->relationship("roles", "name")
 
+                    ])
             ]);
     }
 
@@ -80,6 +85,7 @@ class UserResource extends Resource
                     ->sortable(),
 
             ])
+            ->striped()
             ->filters([
                 SelectFilter::make('role')
                     ->relationship("roles", "name")
@@ -89,6 +95,7 @@ class UserResource extends Resource
                 DeleteAction::make(),
 
             ])
+
             ->groupedBulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
