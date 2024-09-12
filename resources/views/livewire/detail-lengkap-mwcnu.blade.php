@@ -137,17 +137,20 @@ use Illuminate\Support\Carbon;
 
             <div class="grid space-y-4">
                 <div class="flex flex-col gap-2">
+
                     @foreach ($record->status as $item)
+
                     <x-filament::section
-                        icon="{{$item->status === App\Enums\MwcnuStatus::DISETUJUI ? 'heroicon-o-check-circle' : 'heroicon-o-information-circle'}}"
-                        icon-size="md" collapsible collapsed
+                        icon="{{$item->status === App\Enums\MwcnuStatus::DISETUJUI ? 'heroicon-s-check-circle' : 'heroicon-s-information-circle'}}"
+                        icon-size="lg"
+                        icon-color="{{$item->status === App\Enums\MwcnuStatus::DISETUJUI ? 'success' : 'warning'}}"
+                        collapsible collapsed
                         @style(['--c-100:var(--success-100);--c-400:var(--success-400);--c-600:var(--success-600)'=>
                         $item->status ===
                         App\Enums\MwcnuStatus::DISETUJUI,
                         '--c-100:var(--warning-100);--c-400:var(--warning-400);--c-600:var(--warning-600);' =>
                         $item->status === App\Enums\MwcnuStatus::DITINJAU])
-                        class="fi-color-custom !bg-custom-100 text-custom-600 ring-custom-600/10 dark:bg-custom-400/10
-                        dark:text-custom-400 dark:ring-custom-400/30"
+                        @class(["fi-color-custom !bg-custom-100 !text-custom-600 !ring-custom-600/10"])
                         >
                         <x-slot name="heading" class="text-sm">
                             <div class="flex items-center justify-between">
@@ -165,13 +168,10 @@ use Illuminate\Support\Carbon;
                             <span class="text-xs text-gray-500 capitalize text-medium">Pesan:</span>
                             <span class="text-left text-black text-wrap">{{ $item->message ?? '-' }}</span>
                         </div>
-
-
                     </x-filament::section>
 
-
-
                     @endforeach
+
                     @if(count($record->status) == 0)
                     <div>
                         <p>Status tidak ditemukan</p>
