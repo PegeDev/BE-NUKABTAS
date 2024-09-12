@@ -60,10 +60,6 @@ class DetailLengkapMwcnu extends Component implements HasForms
     }
     public function buatForm()
     {
-        // $create = FormMwcnu::create([
-        //     "mwcnu_id" => $this->record->id,
-
-        // ]);
         $this->record->form_mwcnu()->create([
             "is_enabled" => true,
             "code" => Str::random(36)
@@ -73,10 +69,10 @@ class DetailLengkapMwcnu extends Component implements HasForms
     }
 
 
-    public function handleStatusForm(string $bool)
+    public function handleStatusForm(bool $isOpen)
     {
 
-        $this->record->form_mwcnu->is_enabled = $bool;
+        $this->record->form_mwcnu->is_enabled = $isOpen;
         $this->record->form_mwcnu->save();
     }
 
