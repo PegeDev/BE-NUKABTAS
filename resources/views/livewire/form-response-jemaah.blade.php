@@ -27,7 +27,7 @@
             <div class="w-3/4">
                 <h4 class="text-2xl font-bold text-center text-primary">Pendaftaran ditutup</h4>
                 <p class="text-center ">Mohon maaf pendaftaran MWCNU {{ $mwcnu->nama_kecamatan }}
-                    ditutup, silakan hubungi panitia untuk informasi lebih lanjut.</p>
+                    ditutup, silakan hubungi Admin MWCNU {{$mwcnu->nama_kecamatan}} untuk informasi lebih lanjut.</p>
             </div>
         </div>
     </x-filament::section>
@@ -38,7 +38,8 @@
             <div class="w-3/4">
                 <h4 class="text-2xl font-bold text-center text-primary">Berhasil Mendaftar</h4>
                 <p class="text-center ">Terimakasih telah mendaftar di MWCNU {{ $mwcnu->nama_kecamatan }}.
-                    jika ada pertanyaan, silakan hubungi panitia untuk informasi lebih lanjut.</p>
+                    jika ada pertanyaan, silakan hubungi Admin MWCNU {{$mwcnu->nama_kecamatan}} untuk informasi lebih
+                    lanjut.</p>
             </div>
         </div>
     </x-filament::section>
