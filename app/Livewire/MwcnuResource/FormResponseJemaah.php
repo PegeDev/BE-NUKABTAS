@@ -54,12 +54,15 @@ class FormResponseJemaah extends Component implements HasForms
     {
         $find =  FormMwcnu::where('code', $code)->first();
         $mwcnu = Mwcnu::where("id", $find->mwcnu_id)->first();
-
-        if (!$find || !$find->is_enabled || !$mwcnu->detail_mwcnus()->exists()) {
+        if (!$mwcnu->detail_mwcnus()->exists()) {
+            abort(404);
+        } else {
+            $this->mwcnu = $mwcnu;
+        }
+        if (!$find || !$find->is_enabled) {
             $this->isFormOpen = false;
         } else {
             $this->isFormOpen = true;
-            $this->mwcnu = $mwcnu;
         }
         $this->form->fill();
     }
