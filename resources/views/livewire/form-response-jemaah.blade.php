@@ -22,22 +22,23 @@
     </header>
     @if ($this->isFormOpen !== true )
     <x-filament::section>
-        <div class="flex flex-col items-center justify-center">
+        <div class="flex flex-col items-center justify-center gap-2">
             <x-filament::icon icon="heroicon-o-document-text" class="w-32 h-32 text-primary " />
             <div class="w-3/4">
                 <h4 class="text-2xl font-bold text-center text-primary">Pendaftaran ditutup</h4>
-                <p class="text-center ">Mohon Maaf Pendaftaran Keanggotaan MWCNU {{ $mwcnu->nama_kecamatan }}
+                <p class="mt-4 text-center">Mohon Maaf Pendaftaran Pendataan Keanggotaan MWCNU {{ $mwcnu->nama_kecamatan
+                    }}
                     ditutup, silakan hubungi Admin MWCNU {{$mwcnu->nama_kecamatan}} untuk informasi lebih lanjut.</p>
             </div>
         </div>
     </x-filament::section>
     @elseif($this->isSubmited)
     <x-filament::section>
-        <div class="flex flex-col items-center justify-center">
+        <div class="flex flex-col items-center justify-center gap-2">
             <x-filament::icon icon="heroicon-o-document-check" class="w-32 h-32 text-primary " />
             <div class="w-3/4">
                 <h4 class="text-2xl font-bold text-center text-primary">Berhasil Mendaftar</h4>
-                <p class="text-center ">Terimakasih telah mendaftar di MWCNU {{ $mwcnu->nama_kecamatan }}.
+                <p class="mt-4 text-center">Terimakasih telah mendaftar di MWCNU {{ $mwcnu->nama_kecamatan }}.
                     jika ada pertanyaan, silakan hubungi Admin MWCNU {{$mwcnu->nama_kecamatan}} untuk informasi lebih
                     lanjut.</p>
             </div>
