@@ -26,7 +26,7 @@
             <x-filament::icon icon="heroicon-o-document-text" class="w-32 h-32 text-primary " />
             <div class="w-3/4">
                 <h4 class="text-2xl font-bold text-center text-primary">Pendaftaran ditutup</h4>
-                <p class="text-center ">Mohon maaf pendaftaran MWCNU {{ $mwcnu->nama_kecamatan }}
+                <p class="text-center ">Mohon Maaf Pendaftaran Keanggotaan MWCNU {{ $mwcnu->nama_kecamatan }}
                     ditutup, silakan hubungi Admin MWCNU {{$mwcnu->nama_kecamatan}} untuk informasi lebih lanjut.</p>
             </div>
         </div>
