@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("jabatan");
             $table->string('posisi')->nullable();
-            $table->string('masa_khidmat');
+            $table->json('masa_khidmat');
             $table->unsignedBigInteger('jemaah_id');
             $table->foreign("jemaah_id")->references("id")->on("jemaahs")->onDelete("cascade");
             $table->unsignedBigInteger('kepengurusan_id');

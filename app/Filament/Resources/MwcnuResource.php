@@ -77,10 +77,10 @@ class MwcnuResource extends Resource implements HasShieldPermissions
                                         TextInput::make("telp_ketua")
                                             ->placeholder("Nomor Telepon / Whatsapp")
                                             ->mask("9999-9999-99999")
+                                            ->dehydrateStateUsing(fn($state) =>  "62" . str_replace(" ", "", preg_replace("/0/", "", $state)))
                                             ->required()
                                             ->tel()
                                             ->label("Nomor Telp. Ketua"),
-
                                     ]),
                                 Grid::make()
                                     ->columns(2)
@@ -125,6 +125,7 @@ class MwcnuResource extends Resource implements HasShieldPermissions
                                         TextInput::make("telp_admin")
                                             ->placeholder("Nomor Telepon / Whatsapp")
                                             ->mask("9999-9999-99999")
+                                            ->dehydrateStateUsing(fn($state) =>  "62" . str_replace(" ", "", preg_replace("/0/", "", $state)))
                                             ->required()
                                             ->tel()
                                             ->label("Nomor Telp. Admin")

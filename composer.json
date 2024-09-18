@@ -23,7 +23,8 @@
         "laravel/tinker": "^2.8",
         "laravolt/indonesia": "^0.35.0",
         "maatwebsite/excel": "3.1.48",
-        "spatie/laravel-permission": "^6.9"
+        "spatie/laravel-permission": "^6.9",
+        "stevebauman/purify": "^6.2"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.13",

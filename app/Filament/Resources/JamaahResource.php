@@ -512,6 +512,7 @@ class JamaahResource extends Resource implements HasShieldPermissions
         return $table
             ->columns([
                 ImageTextColumn::make("nama_lengkap")
+                    ->state(fn($record) => $record)
                     ->label("NAMA LENGKAP/NIK")
                     ->view("tables.columns.image-text-column"),
                 TextColumn::make('jenis_kelamin')
@@ -539,15 +540,11 @@ class JamaahResource extends Resource implements HasShieldPermissions
                     ->weight(FontWeight::SemiBold)
                     ->label("ALAMAT")
                     ->size(TextColumnSize::Small),
-                TextColumn::make('kepengurusan')
+                TextColumn::make('kepengurusan_type')
                     ->formatStateUsing(function ($state) {
-
                         return Str::title($state);
                     })
-                    ->description(function (Jemaah $record) {
-
-                        return Str::title($record->jabatan_kepengurusan);
-                    })
+                    ->badge()
                     ->weight(FontWeight::SemiBold)
                     ->label("KEPENGURUSAN")
                     ->size(TextColumnSize::Small),

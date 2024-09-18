@@ -71,6 +71,7 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
             ->relationship(fn(): HasMany => $this->record->jemaahs())
             ->columns([
                 ImageTextColumn::make("nama_lengkap")
+                    ->state(fn($record) => $record)
                     ->searchable(true)
                     ->label("NAMA LENGKAP/NIK"),
                 TextColumn::make('jenis_kelamin')
@@ -244,11 +245,11 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
                     ->form([
                         Placeholder::make("template")
                             ->content(new HtmlString('<div class="flex items-center justify-between">
-                            <p class="font-medium hover:underline text-primary">Template-Data-Peserta.xlsx</p>
+                            <p class="font-medium hover:underline text-primary">Template-Data-Warga.xlsx</p>
                             <a href="/template/template-data-peserta.xlsx" class="px-2 py-1 text-sm text-white rounded-md bg-primary" target="__blank">Download</a>
                             </div>'))
 
-                            ->label('Template data peserta'),
+                            ->label('Template data warga'),
                         FileUpload::make("attachment")
                             ->hiddenLabel(true)
                             ->directory('import/jemaah/')

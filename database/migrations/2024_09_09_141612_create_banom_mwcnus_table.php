@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('banom_mwcnus', function (Blueprint $table) {
             $table->id();
             $table->string('jabatan')->nullable();
-            $table->timestamp('masa_khidmat');
+            $table->json('masa_khidmat');
             $table->unsignedBigInteger('jemaah_id');
             $table->foreign("jemaah_id")->references("id")->on("jemaahs")->onDelete("cascade");
             $table->unsignedBigInteger('kepengurusan_id');

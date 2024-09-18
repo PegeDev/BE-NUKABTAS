@@ -15,7 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string("jabatan");
             $table->string('posisi');
-            $table->string('masa_khidmat');
+            $table->json('masa_khidmat');
+            $table->unsignedBigInteger('village_id');
+            $table->foreign('village_id')->references('id')->on('indonesia_villages')->onDelete('cascade');
+            $table->unsignedBigInteger('jemaah_id');
+            $table->foreign("jemaah_id")->references("id")->on("jemaahs")->onDelete("cascade");
             $table->unsignedBigInteger('kepengurusan_id');
             $table->foreign('kepengurusan_id')->references('id')->on('kepengurusan_mwcnus')->onDelete('cascade');
             $table->timestamps();

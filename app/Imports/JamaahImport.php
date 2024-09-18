@@ -114,7 +114,7 @@ class JamaahImport implements ToModel, WithHeadingRow
             Notification::make()
                 ->title("Data Jamaah gagal diimport!")
                 ->danger()
-                ->body("Warga dengan NIK {$row["nik"]} gagal diimport. Silahkan hubungi admin. Error: " . $e->getMessage())
+                ->body("Warga dengan NIK {$row["nik"]} gagal diimport. Silahkan hubungi admin.")
                 ->send()
                 ->sendToDatabase($receipent);
         }

@@ -28,7 +28,7 @@ class Mwcnu extends Model
 
     public function kepengurusan(): HasOne
     {
-        return $this->hasOne(KepengurusanMwcnu::class);
+        return $this->hasOne(KepengurusanMwcnu::class, "mwcnu_id");
     }
 
     public function form_mwcnu(): HasOne
