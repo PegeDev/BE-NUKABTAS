@@ -153,7 +153,7 @@ class PengurusMwcnu extends Page implements HasForms, HasTable, HasActions
                     ->badge()
                     ->placeholder("-"),
                 TextColumn::make($this->isTabAll ? 'kepengurusan_type' : 'jemaah.kepengurusan_type')
-                    ->formatStateUsing(fn($state) => Str::title($state->type))
+                    ->formatStateUsing(fn($state) => Str::upper($state->type))
                     ->description(function ($state) {
                         return Str::title(($state->jabatan ? preg_replace("/_/", " ", $state->jabatan) . ", " : null) . $state->posisi);
                     })

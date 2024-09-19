@@ -30,6 +30,7 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Pages\Page;
 use Filament\Resources\Resource;
+use Filament\Support\Colors\Color;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
@@ -540,21 +541,29 @@ class JamaahResource extends Resource implements HasShieldPermissions
                     ->weight(FontWeight::SemiBold)
                     ->label("ALAMAT")
                     ->size(TextColumnSize::Small),
+
+                TextColumn::make("pekerjaan")
+                    ->formatStateUsing(function ($state) {
+                        return Str::title($state);
+                    })
+                    ->placeholder("-")
+                    ->label("PEKERJAAN"),
                 TextColumn::make('kepengurusan_type')
                     ->formatStateUsing(function ($state) {
-                        return Str::title($state->type);
+                        return Str::upper($state->type ?? $state);
+                    })
+                    ->color(fn($state) => match ($state->type ?? $state) {
+                        "Pengurus MWC" => Color::Fuchsia,
+                        "Ranting" => Color::Cyan,
+                        "Anak Ranting" => Color::Blue,
+                        "Banom" => "warning",
+                        "Lembaga" => "danger",
+                        default => "gray"
                     })
                     ->badge()
                     ->weight(FontWeight::SemiBold)
                     ->label("KEPENGURUSAN")
                     ->size(TextColumnSize::Small),
-                TextColumn::make("pekerjaan")
-                    ->formatStateUsing(function ($state) {
-
-                        return Str::title($state);
-                    })
-                    ->placeholder("-")
-                    ->label("PEKERJAAN")
             ])
             ->recordUrl(fn(Jemaah $record): string => self::getUrl('detail', ['record' => $record->id]))
             ->filters([
