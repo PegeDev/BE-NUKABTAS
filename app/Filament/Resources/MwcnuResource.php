@@ -249,13 +249,13 @@ class MwcnuResource extends Resource implements HasShieldPermissions
                                     Grid::make()
                                         ->schema([
                                             TextInput::make("name")
-                                                ->disabled()
+                                                ->readOnly()
                                                 ->label("Nama Lengkap"),
                                             TextInput::make("email")
                                                 ->extraAttributes([
                                                     "class" => "truncate"
                                                 ])
-                                                ->disabled()
+                                                ->readOnly()
                                                 ->label("Email")
                                         ]),
                                     Grid::make()
@@ -270,7 +270,7 @@ class MwcnuResource extends Resource implements HasShieldPermissions
                                                         ->iconSize('md')
                                                         ->action(function ($component, Set $set, Mwcnu $record) {
 
-                                                            $password = Str::lower($record->nama_kecamatan) . Str::random(6);
+                                                            $password = Str::lower($record->nama_kecamatan) . "@" . mt_rand(100000, 999999);
 
                                                             $user = User::find($record->admin_id);
 
@@ -289,7 +289,7 @@ class MwcnuResource extends Resource implements HasShieldPermissions
                                                 ->type("password")
                                                 ->label("Password"),
                                             DateTimePicker::make("created_at")
-                                                ->disabled()
+                                                ->readOnly()
                                                 ->format("Y-m-d H:i:s")
                                                 ->label("Dibuat"),
 

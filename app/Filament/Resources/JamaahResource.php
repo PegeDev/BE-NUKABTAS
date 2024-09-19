@@ -542,7 +542,7 @@ class JamaahResource extends Resource implements HasShieldPermissions
                     ->size(TextColumnSize::Small),
                 TextColumn::make('kepengurusan_type')
                     ->formatStateUsing(function ($state) {
-                        return Str::title($state);
+                        return Str::title($state->type);
                     })
                     ->badge()
                     ->weight(FontWeight::SemiBold)
