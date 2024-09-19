@@ -43,7 +43,7 @@ class PengurusMwcnu extends Page implements HasForms, HasTable, HasActions
 
     protected static string $view = 'filament.resources.mwcnu-resource.pages.pengurus-mwcnu';
 
-    public $activeTab = 'mwc';
+    public $activeTab = 'banom';
 
     public Mwcnu $record;
 
@@ -155,7 +155,8 @@ class PengurusMwcnu extends Page implements HasForms, HasTable, HasActions
                 TextColumn::make($this->isTabAll ? 'kepengurusan_type' : 'jemaah.kepengurusan_type')
                     ->formatStateUsing(fn($state) => Str::upper($state->type))
                     ->description(function ($state) {
-                        return Str::title(($state->jabatan ? preg_replace("/_/", " ", $state->jabatan) . ", " : null) . $state->posisi);
+                        // dd($state);
+                        return Str::title(($state->jabatan ? preg_replace("/_/", " ", $state->jabatan) . (isset($state->posisi) ? ", " : null) : null) . ($state->posisi ?? null));
                     })
                     ->label("KEPENGURUSAN")
                     ->color(fn($state) => match ($state->type) {
