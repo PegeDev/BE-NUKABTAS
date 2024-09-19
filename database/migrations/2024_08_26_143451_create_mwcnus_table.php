@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('mwcnus', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('kecamatan_id')->index('mwcnus_kecamatan_id_foreign');
+            $table->string('nama_kecamatan');
             $table->timestamps();
         });
     }
