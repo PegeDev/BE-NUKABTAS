@@ -270,8 +270,7 @@ class MwcnuResource extends Resource implements HasShieldPermissions
                                                         ->iconSize('md')
                                                         ->action(function ($component, Set $set, Mwcnu $record) {
 
-                                                            $password = Str::lower($record->nama_kecamatan) . "@240831";
-
+                                                            $password = Str::lower($record->nama_kecamatan) . Str::random(6);
 
                                                             $user = User::find($record->admin_id);
 

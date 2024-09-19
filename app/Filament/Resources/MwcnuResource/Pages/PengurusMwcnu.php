@@ -43,7 +43,7 @@ class PengurusMwcnu extends Page implements HasForms, HasTable, HasActions
 
     protected static string $view = 'filament.resources.mwcnu-resource.pages.pengurus-mwcnu';
 
-    public $activeTab = 'semua';
+    public $activeTab = 'mwc';
 
     public Mwcnu $record;
 
@@ -105,7 +105,7 @@ class PengurusMwcnu extends Page implements HasForms, HasTable, HasActions
         if ($this->activeTab == 'anak_ranting') {
             $query = $this->record->kepengurusan->anak_ranting();
         }
-        // dd($query->first()->nama_desa);
+        // dd($this->activeTab, $query->first()->jemaah->kepengurusan_type);
         return $table
             ->query(fn() => $query)
             ->emptyStateHeading("Data pengurus tidak ditemukan")
@@ -154,20 +154,9 @@ class PengurusMwcnu extends Page implements HasForms, HasTable, HasActions
                     ->placeholder("-"),
                 TextColumn::make($this->isTabAll ? 'kepengurusan_type' : 'jemaah.kepengurusan_type')
                     ->formatStateUsing(fn($state) => Str::title($state->type))
-                    ->description(fn($record) => Str::title(
-                        !$this->isTabAll
-                            ? (
-                                ($record->jabatan ? preg_replace("/_/", " ", $record->jabatan) . ", " : null)
-                                . $record->posisi
-                            )
-                            : (
-                                ($record->kepengurusan_type->jabatan
-                                    ? preg_replace("/_/", " ", $record->kepengurusan_type->jabatan) . ", "
-                                    : null
-                                )
-                                . $record->kepengurusan_type->posisi
-                            )
-                    ))
+                    ->description(function ($state) {
+                        return Str::title(($state->jabatan ? preg_replace("/_/", " ", $state->jabatan) . ", " : null) . $state->posisi);
+                    })
                     ->label("KEPENGURUSAN")
                     ->color(fn($state) => match ($state->type) {
                         "Pengurus MWC" => Color::Fuchsia,
