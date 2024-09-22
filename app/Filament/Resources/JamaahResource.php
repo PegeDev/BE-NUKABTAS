@@ -33,7 +33,9 @@ use Filament\Pages\Page;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\FontWeight;
+use Filament\Tables\Actions\Action as ActionsAction;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction as ActionsDeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\TextColumn\TextColumnSize;
 use Filament\Tables\Table;
@@ -241,7 +243,6 @@ class JamaahResource extends Resource implements HasShieldPermissions
                                         Grid::make()
                                             ->relationship("detail_jemaah")
                                             ->schema([
-
                                                 Textarea::make('alamat_detail')
                                                     ->required()
                                                     ->label("Alamat Lengkap")
@@ -572,11 +573,11 @@ class JamaahResource extends Resource implements HasShieldPermissions
             ])
             ->actions([
                 ActionGroup::make([
-                    Action::make("lihat_detail")
+                    ActionsAction::make("lihat_detail")
                         ->label("Lihat detail")
                         ->icon("heroicon-o-eye")
                         ->url(fn(Jemaah $record): string => self::getUrl('detail', ['record' => $record->id])),
-                    DeleteAction::make("hapus")
+                    ActionsDeleteAction::make("hapus")
                         ->label("Hapus")
                         ->icon("heroicon-o-trash")
                         ->color("danger")
