@@ -43,7 +43,7 @@ class PengurusMwcnu extends Page implements HasForms, HasTable, HasActions
 
     protected static string $view = 'filament.resources.mwcnu-resource.pages.pengurus-mwcnu';
 
-    public $activeTab = 'banom';
+    public $activeTab = 'semua';
 
     public Mwcnu $record;
 
@@ -105,7 +105,7 @@ class PengurusMwcnu extends Page implements HasForms, HasTable, HasActions
         if ($this->activeTab == 'anak_ranting') {
             $query = $this->record->kepengurusan->anak_ranting();
         }
-        // dd($this->activeTab, $query->first()->jemaah->kepengurusan_type);
+
         return $table
             ->query(fn() => $query)
             ->emptyStateHeading("Data pengurus tidak ditemukan")
@@ -115,6 +115,7 @@ class PengurusMwcnu extends Page implements HasForms, HasTable, HasActions
                 ViewColumn::make("jemaah.nama_lengkap")
                     ->state(fn($record) => $record)
                     ->searchable($this->isTabAll ? false : ["jemaah.nama_lengkap", "jemaah.nik"])
+                    ->label("NAMA LENGKAP/NIK")
                     ->view("tables.columns.image-text-column"),
                 TextColumn::make($this->isTabAll ? 'jenis_kelamin' : 'jemaah.jenis_kelamin')
                     ->description(fn($record) => Carbon::parse($record->tanggal_lahir)->age . " tahun")
@@ -155,7 +156,6 @@ class PengurusMwcnu extends Page implements HasForms, HasTable, HasActions
                 TextColumn::make($this->isTabAll ? 'kepengurusan_type' : 'jemaah.kepengurusan_type')
                     ->formatStateUsing(fn($state) => Str::upper($state->type))
                     ->description(function ($state) {
-                        // dd($state);
                         return Str::title(($state->jabatan ? preg_replace("/_/", " ", $state->jabatan) . (isset($state->posisi) ? ", " : null) : null) . ($state->posisi ?? null));
                     })
                     ->label("KEPENGURUSAN")

@@ -56,13 +56,27 @@ class JamaahImport implements ToModel, WithHeadingRow
 
             $searchTerm = strtolower(str_replace(['.', ' '], '%', $row["kabkota"]));
 
-            $province = Province::where("name", $row["provinsi"])->first()->code ?? "";
+            $province = Province::where("name", $row["provinsi"])->first();
+            $provinceCode = $province ? $province->code : '';
+
             $city = City::select('code', 'name')
-                ->whereRaw("LOWER(REPLACE(name, '.', '')) LIKE ?", ["%{$searchTerm}%"])
-                ->orWhereRaw("LOWER(REPLACE(name, ' ', '')) LIKE ?", ["%{$searchTerm}%"])
-                ->first()->code ?? "";
-            $district =  District::where("name", $row["kecamatan"])->first()->code ?? "";
-            $village = Village::where("name", $row["desa"])->first()->code ?? "";
+                ->where("province_code", $provinceCode)
+                ->where(function ($query) use ($searchTerm) {
+                    $query->whereRaw("LOWER(REPLACE(name, '.', '')) LIKE ?", ["%{$searchTerm}%"])
+                        ->orWhereRaw("LOWER(REPLACE(name, ' ', '')) LIKE ?", ["%{$searchTerm}%"]);
+                })
+                ->first();
+            $cityCode = $city ? $city->code : '';
+
+            $district = District::where("city_code", $cityCode)
+                ->where("name", $row["kecamatan"])
+                ->first();
+            $districtCode = $district ? $district->code : '';
+
+            $village = Village::where("district_code", $districtCode)
+                ->where("name", $row["desa"])
+                ->first();
+            $villageCode = $village ? $village->code : '';
 
 
 
@@ -91,10 +105,10 @@ class JamaahImport implements ToModel, WithHeadingRow
             );
 
             $this->currentJemaah->alamat_jemaah()->updateOrCreate([
-                "provinsi" => $province,
-                "kota" => $city,
-                "kecamatan" => $district,
-                "desa" => $village,
+                "provinsi" => $provinceCode,
+                "kota" => $cityCode,
+                "kecamatan" => $districtCode,
+                "desa" => $villageCode,
                 "jemaah_id" => $this->currentJemaah->id
             ]);
 

@@ -8,6 +8,7 @@ use App\Filament\Resources\JamaahResource\Pages\DetailJamaah;
 use App\Filament\Resources\JamaahResource\Pages\EditJamaah;
 use Illuminate\Support\Str;
 use App\Forms\Components\GridHeading;
+use App\Models\DetailJemaah;
 use App\Models\Jemaah;
 use App\Tables\Columns\ImageTextColumn;
 use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
@@ -277,7 +278,7 @@ class JamaahResource extends Resource implements HasShieldPermissions
                                                     ->label("Apakah pernah belajar dan mengaji di Pondok Pesantren?")
                                                     ->columnSpanFull()
                                                     ->required()
-                                                    ->hidden(fn(Page $livewire) => $livewire instanceof DetailJamaah)
+                                                    ->visible(fn(Page $livewire) => $livewire instanceof EditJamaah)
                                                     ->live(),
                                                 Repeater::make('riwayat_pesantren')
                                                     ->label('Riwayat Pendidikan Pondok Pesantren')
@@ -304,15 +305,15 @@ class JamaahResource extends Resource implements HasShieldPermissions
                                                     ]))
                                                     ->live()
                                                     ->collapsible()
-
                                                     ->columnSpanFull()
-                                                    ->hidden(function (Get $get) {
-                                                        if ($get("isPesantren") === "pernah") {
+                                                    ->hidden(function (Get $get, Page $livewire) {
+                                                        if ($get("isPesantren") === "pernah" || !$livewire instanceof EditJamaah) {
                                                             return false;
                                                         }
+
                                                         return true;
                                                     })
-                                                    ->defaultItems(1),
+                                                    ->defaultItems(0),
                                             ])->columnSpanFull()
 
                                     ])

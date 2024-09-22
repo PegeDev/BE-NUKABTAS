@@ -25,7 +25,7 @@ use Illuminate\Support\Carbon;
                 Informasi Lengkap <span class="font-bold">MWC {{ $record->nama_kecamatan }}</span>
             </x-slot>
 
-            <div class="grid grid-cols-2 gap-6 mb-6">
+            <div class="grid gap-6 mb-6 md:grid-cols-2">
 
                 <div class="relative space-y-2">
                     <label for="nama_kecamatan" class="text-sm font-medium">Nama Kecamatan</label>
@@ -73,7 +73,7 @@ use Illuminate\Support\Carbon;
             </x-slot>
 
 
-            <div class="grid grid-cols-2 gap-6 mb-6">
+            <div class="grid gap-6 mb-6 md:grid-cols-2">
 
                 <div class="relative space-y-2">
                     <label for="nama_kecamatan" class="text-sm font-medium">Nama Admin</label>
@@ -89,15 +89,15 @@ use Illuminate\Support\Carbon;
                             value="{{ $record->detail_mwcnus->telp_admin ?? 'tidak tersedia' }}" readOnly />
                     </x-filament::input.wrapper>
                 </div>
-                <div class="relative col-span-2 space-y-2">
-                    <label for="alamat_admin" class="text-sm font-medium">Alamat</label>
-                    <x-filament::input.wrapper>
-                        <textarea type="text" id="alamat_admin"
-                            class="block h-full w-full border-none bg-transparent px-3 py-1.5 text-base text-gray-950 placeholder:text-gray-400 focus:ring-0 disabled:text-gray-500 disabled:[-webkit-text-fill-color:theme(colors.gray.500)] disabled:placeholder:[-webkit-text-fill-color:theme(colors.gray.400)] dark:text-white dark:placeholder:text-gray-500 dark:disabled:text-gray-400 dark:disabled:[-webkit-text-fill-color:theme(colors.gray.400)] dark:disabled:placeholder:[-webkit-text-fill-color:theme(colors.gray.500)] sm:text-sm sm:leading-6 resize-none"
-                            readOnly rows="5">{{ $record->detail_mwcnus->alamat_admin ?? 'tidak tersedia' }}</textarea>
-                    </x-filament::input.wrapper>
-                </div>
 
+            </div>
+            <div class="relative space-y-2">
+                <label for="alamat_admin" class="text-sm font-medium">Alamat</label>
+                <x-filament::input.wrapper>
+                    <textarea type="text" id="alamat_admin"
+                        class="block h-full w-full border-none bg-transparent px-3 py-1.5 text-base text-gray-950 placeholder:text-gray-400 focus:ring-0 disabled:text-gray-500 disabled:[-webkit-text-fill-color:theme(colors.gray.500)] disabled:placeholder:[-webkit-text-fill-color:theme(colors.gray.400)] dark:text-white dark:placeholder:text-gray-500 dark:disabled:text-gray-400 dark:disabled:[-webkit-text-fill-color:theme(colors.gray.400)] dark:disabled:placeholder:[-webkit-text-fill-color:theme(colors.gray.500)] sm:text-sm sm:leading-6 resize-none"
+                        readOnly rows="5">{{ $record->detail_mwcnus->alamat_admin ?? 'tidak tersedia' }}</textarea>
+                </x-filament::input.wrapper>
             </div>
             <div class="relative space-y-2">
                 <label for="alamat" class="text-sm font-medium">Surat Tugas</label>
@@ -111,7 +111,7 @@ use Illuminate\Support\Carbon;
                             style="box-sizing:border-box;border:0px solid rgb(229, 231, 235);"></path>
                     </svg>
                     <a href="{{ route('surat-tugas', ['filename' => str_replace('surat_tugas/', '', $record->detail_mwcnus->surat_tugas ?? '')]) }}"
-                        target="_blank" rel="noreferrer"
+                        target="_blank" rel="noreferrer" class="truncate"
                         style="color:rgb(59, 130, 246);text-decoration:none solid rgb(59, 130, 246);box-sizing:border-box;border:0px solid rgb(229, 231, 235);">{{
                         str_replace('surat_tugas/', '', $record->detail_mwcnus->surat_tugas ?? '') }}</a>
                 </div>
@@ -218,10 +218,10 @@ use Illuminate\Support\Carbon;
                         {{ url('/') . '/form/' . $this->record->form_mwcnu->code }}
                     </a>
                     <div class="relative z-10 w-fit hover:cursor-pointer">
-                        <button @click="copyToClipboard(link)"
-                            class="inline-flex items-center justify-center rounded-md bg-blue-100 px-2.5 py-1.5">
-                            <p class="text-xs font-medium leading-none text-center text-blue-800">COPY LINK</p>
-                        </button>
+                        <x-filament::button icon="heroicon-m-clipboard-document-check" size="xs" x-on:click="window.navigator.clipboard.writeText('{{ url('/') . '/form/' . $this->record->form_mwcnu->code }}');
+                $tooltip('{{__('Berhasil di copy')}}', { timeout: 1500 });" color="info">
+                            COPY LINK
+                        </x-filament::button>
                     </div>
 
                 </div>
