@@ -594,6 +594,11 @@ class JamaahResource extends Resource implements HasShieldPermissions
             ]);
     }
 
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
     public static function getRelations(): array
     {
         return [
