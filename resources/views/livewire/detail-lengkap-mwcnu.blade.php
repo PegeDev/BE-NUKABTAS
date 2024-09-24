@@ -8,16 +8,29 @@ use Illuminate\Support\Carbon;
 
     {{-- Informasi Lengkap MWCNU --}}
 
-
     @if (!$this->record->detail_mwcnus)
-    <div class="inset-0 flex flex-col items-center justify-center ">
-        <p class="font-medium text-center text-red-500">Form Belum Tersedia!</p>
-        <p class="text-xs">Silahkan lengkapi detail kecamatan, atau klik pada tombol dibawah!</p>
-        <x-filament::button class="mt-4"
-            href="{{ route('filament.dashboard.resources.data-kecamatan.edit', ['record' => $this->record]) }}" tag="a"
-            icon="heroicon-o-pencil-square" size="sm">Lengkapi
-            Detail</x-filament::button>
-    </div>
+    <x-filament::section>
+        <div class="inset-0 flex flex-col items-center justify-center ">
+            @if ($record->admin_id === auth()->user()->id)
+            <x-filament::icon icon="heroicon-o-document-text" class="w-32 h-32 text-primary " />
+            <p class="font-medium text-center text-red-500">
+                Detail Lengkap Kecamatan {{ $record->nama_kecamatan }}
+            </p>
+            <p class="text-xs">Silahkan lengkapi detail kecamatan, atau klik pada tombol dibawah!</p>
+            <x-filament::button class="mt-4"
+                href="{{ route('filament.dashboard.resources.data-kecamatan.edit', ['record' => $this->record]) }}"
+                tag="a" icon="heroicon-o-pencil-square" size="sm">Lengkapi
+                Detail</x-filament::button>
+            @else
+            <x-filament::icon icon="heroicon-o-document-text" class="w-32 h-32 text-primary " />
+            <p class="font-bold text-center text-red-500 text-lg">
+                Detail Kecamatan {{ $record->nama_kecamatan }} Belum Tersedia
+            </p>
+            <p class="text-xs">Silahkan lengkapi detail kecamatan, atau klik pada tombol dibawah!</p>
+            @endif
+            </p>
+        </div>
+    </x-filament::section>
     @else
     <div class="col-span-12 space-y-6 md:col-span-8">
         <x-filament::section class="col-span-12 md:col-span-8">

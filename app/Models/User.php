@@ -63,6 +63,6 @@ class User extends Authenticatable implements HasName, HasAvatar
     }
     public function getFilamentAvatarUrl(): ?string
     {
-        return $this->profile_picture !== null ? Storage::url($this->profile_picture) : null;
+        return $this->profile_picture  ? Storage::url($this->profile_picture) : null;
     }
 }
