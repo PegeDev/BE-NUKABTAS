@@ -205,6 +205,7 @@ use Illuminate\Support\Carbon;
         <div x-data="{
                 formResponse: @js($this->record->form_mwcnu),
             }">
+            @if($record->admin_id === auth()->user()->id)
             <x-filament::section class="relative overflow-hidden">
 
                 <x-slot name="heading">
@@ -248,7 +249,7 @@ use Illuminate\Support\Carbon;
                 @endif
 
             </x-filament::section>
-
+            @endif
 
         </div>
 
