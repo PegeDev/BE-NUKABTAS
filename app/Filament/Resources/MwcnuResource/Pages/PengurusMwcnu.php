@@ -178,6 +178,7 @@ class PengurusMwcnu extends Page implements HasForms, HasTable, HasActions
                         ->visible(fn($record) => ! $this->isTabAll)
                         ->icon("heroicon-o-trash")
                         ->label("Hapus")
+                        ->visible($this->record->admin_id === auth()->user()->id)
                         ->successNotification(
                             function ($record) {
                                 Notification::make()
@@ -216,6 +217,7 @@ class PengurusMwcnu extends Page implements HasForms, HasTable, HasActions
     public function addPengurus(): Action
     {
         return Action::make("addPengurus")
+
             ->icon("heroicon-m-plus")
             ->successNotificationTitle("Berhasil menambah Pengurus MWC")
             ->label("Tambah Pengurus")
@@ -320,6 +322,7 @@ class PengurusMwcnu extends Page implements HasForms, HasTable, HasActions
     public function addLembaga(): Action
     {
         return Action::make("addLembaga")
+
             ->icon("heroicon-m-plus")
             ->label("Tambah Pengurus")
             ->successNotificationTitle("Berhasil menambah Pengurus Lembaga")
@@ -434,6 +437,7 @@ class PengurusMwcnu extends Page implements HasForms, HasTable, HasActions
     public function addBanom(): Action
     {
         return Action::make("addBanom")
+
             ->icon("heroicon-m-plus")
             ->label("Tambah Pengurus")
             ->form([
@@ -555,6 +559,7 @@ class PengurusMwcnu extends Page implements HasForms, HasTable, HasActions
     public function addRantingNu(): Action
     {
         return Action::make("addRantingNU")
+
             ->icon("heroicon-m-plus")
             ->label("Tambah Pengurus")
             ->form([
@@ -666,6 +671,7 @@ class PengurusMwcnu extends Page implements HasForms, HasTable, HasActions
     public function addAnakRanting(): Action
     {
         return Action::make("addAnakRanting")
+
             ->icon("heroicon-m-plus")
             ->label("Tambah Pengurus")
             ->form([

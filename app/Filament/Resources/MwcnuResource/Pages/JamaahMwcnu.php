@@ -26,6 +26,7 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
+use Filament\Support\Colors\Color;
 use Filament\Support\Enums\ActionSize;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Actions\Action;
@@ -98,15 +99,21 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
                     ->weight(FontWeight::Medium)
                     ->label("ALAMAT")
                     ->size(TextColumnSize::Small),
-                TextColumn::make('pengurus')
-                    ->badge()
-                    ->color(fn(Jemaah $record): string => $record->pengurus ? "primary" : "warning")
-                    ->formatStateUsing(function ($state): string {
-                        return  $state !== "WARGA" ? "PENGURUS" : "WARGA";
+                TextColumn::make('kepengurusan_type')
+                    ->formatStateUsing(function ($state) {
+                        return Str::upper($state->type ?? $state);
                     })
-                    ->default("WARGA")
-                    ->weight(FontWeight::Medium)
-                    ->label("STATUS")
+                    ->color(fn($state) => match ($state->type ?? $state) {
+                        "Pengurus MWC" => Color::Fuchsia,
+                        "Ranting" => Color::Cyan,
+                        "Anak Ranting" => Color::Blue,
+                        "Banom" => "warning",
+                        "Lembaga" => "danger",
+                        default => "gray"
+                    })
+                    ->badge()
+                    ->weight(FontWeight::SemiBold)
+                    ->label("KEPENGURUSAN")
                     ->size(TextColumnSize::Small),
             ])
             ->filters([
@@ -238,6 +245,7 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
             ])
             ->headerActions([
                 Action::make("Import")
+                    ->visible($this->record->admin_id === auth()->user()->id)
                     ->icon("heroicon-o-document-arrow-up")
                     ->color('info')
                     ->size(ActionSize::Large)
@@ -273,14 +281,16 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
 
                 Action::make("Export")
                     ->icon("heroicon-o-document-arrow-down")
+                    ->visible($this->record->admin_id === auth()->user()->id)
                     ->color('info')
                     ->size(ActionSize::Large)
                     ->action(
-                        fn() => Excel::download(new JamaahExport($this->record->jemaahs), "Warga-{$this->record->nama_kecamatan}.xlsx")
+                        fn() => Excel::download(new JamaahExport($this->record->jemaahs), "warga-{$this->record->nama_kecamatan}.xlsx")
                     ),
                 Action::make("buat_warga")
                     ->label("Buat Warga baru")
                     ->icon("heroicon-o-user-plus")
+                    ->visible($this->record->admin_id === auth()->user()->id)
                     ->color('primary')
                     ->size(ActionSize::Large)
                     ->url(fn($record) => MwcnuResource::getUrl('buat-warga', ["record" => $this->record])),

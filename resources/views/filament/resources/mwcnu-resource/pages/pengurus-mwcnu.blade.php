@@ -47,6 +47,7 @@
     </div>
 
     <div class="mb-5 ml-auto w-fit">
+        @if ($this->record->admin_id === auth()->user()->id)
         @if ($activeTab === 'mwc')
         {{$this->addPengurus()}}
         @elseif ($activeTab === 'lembaga')
@@ -58,6 +59,8 @@
         @elseif ($activeTab === 'anak_ranting')
         {{$this->addAnakRanting()}}
         @endif
+        @endif
+
         <x-filament-actions::modals />
     </div>
     <div wire:target="setTabs" wire:loading.class="relative overflow-hidden rounded-md">
