@@ -55,4 +55,13 @@ class Mwcnu extends Model
     {
         return $this->hasOne(MwcnuStatus::class)->latestOfMany();
     }
+
+    public function pengajuan_sk_mwcnu(): HasMany
+    {
+        return $this->hasMany(PengajuanSkMwcnu::class);
+    }
+    public function surat_keputusan_mwcnu(): HasMany
+    {
+        return $this->hasMany(SuratKeputusanMwcnu::class);
+    }
 }

@@ -347,6 +347,7 @@ class MwcnuResource extends Resource implements HasShieldPermissions
             'create' => Pages\CreateMwcnu::route('/create'),
             'edit' => Pages\EditMwcnu::route('/{record}/edit'),
             'detail' => Pages\DetailMwcnu::route('/{record}'),
+            'surat-keputusan' => Pages\SuratKeputusanMwcnu::route('/{record}?state=surat-keputusan'),
             'warga' => Pages\JamaahMwcnu::route('/{record}?state=warga'),
             "pengurus" => Pages\PengurusMwcnu::route('/{record}/?state=kepengurusan'),
             'buat-warga' => Pages\CreateJamaahMwcnu::route('/{record}/buat-warga'),

@@ -8,6 +8,7 @@ use Filament\Resources\Concerns\HasTabs;
 use Filament\Resources\Pages\Page;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
 use Filament\Actions\EditAction;
+use Filament\Pages\Page as PagesPage;
 use Illuminate\Contracts\Support\Htmlable;
 
 class DetailMwcnu extends Page
@@ -30,7 +31,7 @@ class DetailMwcnu extends Page
     {
         $this->record = $this->resolveRecord($record);
         $this->state = request()->query('state', 'detail');
-        if ($this->state !== 'warga' && $this->state !== 'detail' && $this->state !== 'kepengurusan') {
+        if (!in_array($this->state, ['detail', 'surat-keputusan', 'warga', 'pengurus'])) {
             redirect()->to(MwcnuResource::getUrl('detail', ['record' => $this->record->id]));
         }
     }
@@ -41,7 +42,7 @@ class DetailMwcnu extends Page
             EditAction::make("edit")
                 ->icon("heroicon-o-pencil-square")
                 ->label("Edit Detail")
-                ->visible(auth()->user()->id === $this->record->admin_id)
+                ->visible(auth()->user()->id === $this->record->admin_id && $this->state === 'detail' || auth()->user()->hasRole(['super_admin', 'admin_kabupaten']))
                 ->url(MwcnuResource::getUrl('edit', ['record' => $this->record->id])),
         ];
     }
@@ -51,6 +52,11 @@ class DetailMwcnu extends Page
             "label" => "Detail",
             "icon" => "heroicon-o-clipboard-document-list",
             "view" => "filament.dashboard.resources.data-kecamatan.detail",
+        ],
+        [
+            "label" => "Surat Keputusan",
+            "icon" => "heroicon-o-document-check",
+            "view" => "filament.dashboard.resources.data-kecamatan.surat-keputusan",
         ],
         [
             "label" => "Warga",

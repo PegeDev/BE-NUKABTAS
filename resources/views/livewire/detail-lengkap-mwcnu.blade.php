@@ -191,7 +191,8 @@ use Illuminate\Support\Carbon;
                     </div>
                     @endif
                 </div>
-                @if ($record->current_status && $record->current_status->status !== App\Enums\MwcnuStatus::DISETUJUI)
+                @if (auth()->user()->hasRole(['admin_kabupaten', 'super_admin']) && $record->current_status?->status !==
+                App\Enums\MwcnuStatus::DISETUJUI)
                 <x-filament::button size="sm" icon="heroicon-o-document-check" class="ml-auto uppercase"
                     x-on:click="$dispatch('open-modal', { id: 'form-status' })">
                     setujui
@@ -205,7 +206,7 @@ use Illuminate\Support\Carbon;
         <div x-data="{
                 formResponse: @js($this->record->form_mwcnu),
             }">
-            @if($record->admin_id === auth()->user()->id)
+            @if($record->admin_id === auth()->user()->id || auth()->user()->hasRole(['admin_kabupaten', 'super_admin']))
             <x-filament::section class="relative overflow-hidden">
 
                 <x-slot name="heading">
