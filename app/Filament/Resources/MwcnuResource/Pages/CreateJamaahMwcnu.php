@@ -11,8 +11,6 @@ class CreateJamaahMwcnu extends Page
 {
     protected static string $resource = MwcnuResource::class;
 
-    // protected static ?string $title = 'Buat Warga' . $this->record->nama_kecamatan;
-
     protected static string $view = 'filament.resources.mwcnu-resource.pages.buat-warga';
 
     public Mwcnu $record;

@@ -15,6 +15,20 @@
                     {{$pengurusCount}}
                 </x-slot>
             </x-filament::tabs.item>
+            <x-filament::tabs.item @class(["bg-slate-100"]) icon="ionicon-git-branch"
+            :active="$activeTab === 'ranting_nu'" wire:click="setTabs('ranting_nu')">
+            Ranting NU
+                <x-slot name="badge">
+                    {{$rantingNuCount}}
+                </x-slot>
+            </x-filament::tabs.item>
+            <x-filament::tabs.item @class(["bg-slate-100"]) icon="ionicon-git-branch"
+                :active="$activeTab === 'anak_ranting'" wire:click="setTabs('anak_ranting')">
+                Anak Ranting
+                <x-slot name="badge">
+                    {{$anakRantingCount}}
+                </x-slot>
+            </x-filament::tabs.item>
             <x-filament::tabs.item @class(["bg-slate-100"]) icon="ionicon-git-branch" :active="$activeTab === 'lembaga'"
                 wire:click="setTabs('lembaga')">
                 Lembaga
@@ -29,39 +43,13 @@
                     {{$banomCount}}
                 </x-slot>
             </x-filament::tabs.item>
-            <x-filament::tabs.item @class(["bg-slate-100"]) icon="ionicon-git-branch"
-                :active="$activeTab === 'ranting_nu'" wire:click="setTabs('ranting_nu')">
-                Ranting NU
-                <x-slot name="badge">
-                    {{$rantingNuCount}}
-                </x-slot>
-            </x-filament::tabs.item>
-            <x-filament::tabs.item @class(["bg-slate-100"]) icon="ionicon-git-branch"
-                :active="$activeTab === 'anak_ranting'" wire:click="setTabs('anak_ranting')">
-                Anak Ranting
-                <x-slot name="badge">
-                    {{$anakRantingCount}}
-                </x-slot>
-            </x-filament::tabs.item>
+           
         </x-filament::tabs>
     </div>
-
     <div class="mb-5 ml-auto w-fit">
-        @if ($this->record->admin_id === auth()->user()->id)
-        @if ($activeTab === 'mwc')
-        {{$this->addPengurus()}}
-        @elseif ($activeTab === 'lembaga')
-        {{$this->addLembaga()}}
-        @elseif ($activeTab === 'banom')
-        {{$this->addBanom()}}
-        @elseif ($activeTab === 'ranting_nu')
-        {{$this->addRantingNu()}}
-        @elseif ($activeTab === 'anak_ranting')
-        {{$this->addAnakRanting()}}
+        @if ($this->record->admin_id === auth()->user()->id || auth()->user()->hasRole(['super_admin',"admin_kabupaten"]))
+           {{ $this->createAction()}}
         @endif
-        @endif
-
-        <x-filament-actions::modals />
     </div>
     <div wire:target="setTabs" wire:loading.class="relative overflow-hidden rounded-md">
         <div wire:target="setTabs" wire:loading

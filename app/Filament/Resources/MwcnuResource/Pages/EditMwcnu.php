@@ -15,7 +15,6 @@ class EditMwcnu extends EditRecord
 {
     protected static string $resource = MwcnuResource::class;
 
-
     public function getTitle(): string|Htmlable
     {
         return 'Detail Kecamatan ' . $this->record->nama_kecamatan;
@@ -25,8 +24,6 @@ class EditMwcnu extends EditRecord
     {
         return $this->getResource()::getUrl('detail', ["record" => $this->record->id]);
     }
-
-
 
     protected function afterSave(): void
     {
@@ -48,7 +45,9 @@ class EditMwcnu extends EditRecord
                         ->icon('heroicon-o-eye')
                         ->badge()
                         ->color('gray')
+                        ->extraAttributes(["class" => "ring-0"])
                         ->label('lihat')
+                        ->markAsRead()
                         ->url($this->getResource()::getUrl('detail', ["record" => $this->record->id]))
                 ])
                 ->sendToDatabase($recipient);
@@ -57,6 +56,6 @@ class EditMwcnu extends EditRecord
 
     protected function getSavedNotificationTitle(): ?string
     {
-        return 'Detail Kecamatan berhasil diubah';
+        return 'Detail Kecamatan berhasil diperbarui';
     }
 }

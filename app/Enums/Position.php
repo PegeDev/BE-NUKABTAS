@@ -30,14 +30,14 @@ enum Position: string implements HasLabel
     {
         return match ($posisi) {
             default => [],
-            self::Syuriyah => [
+            self::Syuriyah->getLabel() => [
                 'rais' => 'Rais',
                 'wakil_rais' => 'Wakil Rais',
                 'katib' => 'Katib',
-                'wakil katib' => 'Wakil Katib',
+                'wakil_katib' => 'Wakil Katib',
                 "awan" => "A'Wan"
             ],
-            self::Tanfidziyah => [
+            self::Tanfidziyah->getLabel() => [
                 "ketua" => "Ketua",
                 "wakil_ketua" => "Wakil Ketua",
                 "sekertaris" => "Sekertaris",

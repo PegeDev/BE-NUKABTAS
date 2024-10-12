@@ -18,6 +18,11 @@ class EditJamaah extends EditRecord
         return $data;
     }
 
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        dump($data);
+        return $data;
+    }
 
 
     protected function getSavedNotificationTitle(): ?string

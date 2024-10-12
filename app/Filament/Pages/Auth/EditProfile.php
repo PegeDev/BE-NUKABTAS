@@ -20,9 +20,6 @@ class EditProfile extends BaseEditProfile
         return 'Berhasil update profil';
     }
 
-
-
-
     public function form(Form $form): Form
     {
         return $form

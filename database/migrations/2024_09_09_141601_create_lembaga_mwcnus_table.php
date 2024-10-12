@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('lembaga_mwcnus', function (Blueprint $table) {
             $table->id();
             $table->string('jabatan')->nullable();
-            $table->json('masa_khidmat');
             $table->unsignedBigInteger('jemaah_id');
             $table->foreign("jemaah_id")->references("id")->on("jemaahs")->onDelete("cascade");
-            $table->unsignedBigInteger('kepengurusan_id');
-            $table->foreign('kepengurusan_id')->references('id')->on('kepengurusan_mwcnus')->onDelete('cascade');
+            $table->unsignedBigInteger('surat_keputusan_mwcnu_id');
+            $table->foreign('surat_keputusan_mwcnu_id')->references('id')->on('surat_keputusan_mwcnus')->onDelete('cascade');
             $table->unsignedBigInteger('lembaga_id');
             $table->foreign("lembaga_id")->references("id")->on("lembaga_masters")->onDelete("cascade");
             $table->timestamps();

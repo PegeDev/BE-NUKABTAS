@@ -13,7 +13,7 @@
                 @if($address)
                 <div class="flex flex-col items-start">
                     <p class="text-xs leading-5">{{Str::title($address?->kecamatan()->first()->name) }},
-                        {{Str::title($address?->kota()->first()->name) }}, {{
+                        {{Str::title(str_replace("KABUPATEN", "Kab.", $address?->kota()->first()->name)) }}, {{
                         Str::title($address?->provinsi()->first()->name) }}</p>
                 </div>
                 @else

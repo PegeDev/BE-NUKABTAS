@@ -180,10 +180,10 @@ class FormResponseJemaah extends Component implements HasForms
                                             ->required()
                                             ->label("Alamat Email"),
                                         TextInput::make("telp")
-                                            ->dehydrateStateUsing(fn($state) =>  "62" . str_replace(" ", "", preg_replace("/0/", "", $state)))
+                                            ->mask('+(62) 999 9999 99999')
+                                            ->default('62')
                                             ->required()
                                             ->tel()
-                                            ->mask("9999 9999 99999")
                                             ->placeholder("Nomor Telpon")
                                             ->label("Nomor Telpon"),
                                     ])
@@ -204,14 +204,14 @@ class FormResponseJemaah extends Component implements HasForms
                                         Select::make("pendidikan_terakhir")
                                             ->placeholder("Pilih pendidikan terakhir")
                                             ->options([
-                                                "pondok pesantren" => "Pondok Pesantren",
-                                                "sd" => "SD / Sederajat",
-                                                "smp" => "SMP / Sederajat",
-                                                "sma" => "SMA / Sederajat",
-                                                "d3" => "D3",
-                                                "s1" => "S1",
-                                                "s2" => "S2",
-                                                "s3" => "S3",
+                                                "Pondok Pesantren",
+                                                "SD / Sederajat",
+                                                "SMP / Sederajat",
+                                                "SMA / Sederajat",
+                                                "D3",
+                                                "S1",
+                                                "S2",
+                                                "S3",
                                             ])
                                             ->required()
                                             ->label("Pendidikan Terakhir")

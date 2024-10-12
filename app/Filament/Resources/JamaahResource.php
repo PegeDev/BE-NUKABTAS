@@ -39,6 +39,7 @@ use Filament\Tables\Actions\DeleteAction as ActionsDeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\TextColumn\TextColumnSize;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Laravolt\Indonesia\Models\City;
 use Laravolt\Indonesia\Models\District;
@@ -120,7 +121,7 @@ class JamaahResource extends Resource implements HasShieldPermissions
                                         TextInput::make("telp")
                                             ->required()
                                             ->tel()
-                                            ->mask("9999 9999 99999")
+                                            ->mask('+(62) 999 9999 99999')
                                             ->placeholder("Nomor Handphone")
                                             ->label("Nomor Handphone"),
                                     ])
@@ -513,11 +514,11 @@ class JamaahResource extends Resource implements HasShieldPermissions
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn(Builder $query) => $query->whereDoesntHave('kader'))
             ->columns([
                 ImageTextColumn::make("nama_lengkap")
                     ->state(fn($record) => $record)
-                    ->label("NAMA LENGKAP/NIK")
-                    ->view("tables.columns.image-text-column"),
+                    ->label("NAMA LENGKAP/NIK"),
                 TextColumn::make('jenis_kelamin')
                     ->description(fn(Jemaah $record): string => (Carbon::parse($record->tanggal_lahir)->age ?? "") . " Tahun")
                     ->weight(FontWeight::SemiBold)
@@ -525,8 +526,8 @@ class JamaahResource extends Resource implements HasShieldPermissions
                     ->label("GENDER/UMUR")
                     ->size(TextColumnSize::Small),
                 TextColumn::make('telp')
-                    ->formatStateUsing(fn($state) => "+{$state}")
-                    ->description(fn(Jemaah $record): string => $record->email)
+                    ->formatStateUsing(fn($state) => "+" . str_replace('+', '', $state))
+                    ->description(fn(Jemaah $record): string => $record->email ?? "-")
                     ->weight(FontWeight::SemiBold)
                     ->label("TELEPON/EMAIL")
                     ->size(TextColumnSize::Small),
@@ -537,7 +538,7 @@ class JamaahResource extends Resource implements HasShieldPermissions
                     ->description(function ($state) {
                         $findCity =  $state ? $state->kota()->first()->name : null;
                         $findDistrict =   $state ? $state->kecamatan()->first()->name : null;
-                        return Str::title($findDistrict  . ", " .  $findCity);
+                        return Str::title($findDistrict  . ", " .  str_replace("KABUPATEN", "Kab. ", $findCity));
                     })
                     ->placeholder("-")
                     ->weight(FontWeight::SemiBold)
@@ -550,22 +551,30 @@ class JamaahResource extends Resource implements HasShieldPermissions
                     })
                     ->placeholder("-")
                     ->label("PEKERJAAN"),
-                TextColumn::make('kepengurusan_type')
-                    ->formatStateUsing(function ($state) {
-                        return Str::upper($state->type ?? $state);
-                    })
-                    ->color(fn($state) => match ($state->type ?? $state) {
-                        "Pengurus MWC" => Color::Fuchsia,
-                        "Ranting" => Color::Cyan,
-                        "Anak Ranting" => Color::Blue,
-                        "Banom" => "warning",
-                        "Lembaga" => "danger",
-                        default => "gray"
-                    })
-                    ->badge()
-                    ->weight(FontWeight::SemiBold)
-                    ->label("KEPENGURUSAN")
-                    ->size(TextColumnSize::Small),
+                // TextColumn::make('kepengurusan_type')
+                //     ->formatStateUsing(fn($state) =>  Str::upper($state->type))
+                //     ->description(function ($state) {
+                //         if ($state?->jabatan || $state?->posisi) {
+                //             $jabatan = $state?->jabatan ? preg_replace("/_/", " ", $state->jabatan) : null;
+                //             $posisi = $state?->posisi ?? null;
+                //             $separator = isset($posisi) && $jabatan ? ', ' : null;
+
+                //             return Str::title($posisi . $separator . $jabatan);
+                //         }
+                //         return null;
+                //     })
+                //     ->label("KEPENGURUSAN")
+                //     ->color(fn($state) => match (Str::slug($state->type)) {
+                //         "pengurus-mwc" => Color::Fuchsia,
+                //         "ranting-nu" => Color::Cyan,
+                //         "anak-ranting" => Color::Blue,
+                //         "banom" => "warning",
+                //         "lembaga" => "danger",
+                //         "warga" => "primary",
+                //         default => "gray"
+                //     })
+                //     ->badge()
+                //     ->placeholder("-")
             ])
             ->recordUrl(fn(Jemaah $record): string => self::getUrl('detail', ['record' => $record->id]))
             ->filters([

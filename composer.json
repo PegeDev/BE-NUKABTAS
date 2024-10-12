@@ -12,6 +12,7 @@
         "althinect/filament-spatie-roles-permissions": "^2.2",
         "bezhansalleh/filament-shield": "^3.2",
         "blade-ui-kit/blade-icons": "^1.7",
+        "codeat3/blade-fluentui-system-icons": "^1.33",
         "codeat3/blade-iconpark": "^1.6",
         "faisal50x/blade-ionicons": "^1.0",
         "filament/filament": "3.2.109",
@@ -46,12 +47,18 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Support/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        }
+        },
+        "files": [
+            "app/Support/helpers.php"
+        ]
     },
     "scripts": {
         "post-autoload-dump": [

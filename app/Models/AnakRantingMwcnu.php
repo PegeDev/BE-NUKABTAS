@@ -14,9 +14,9 @@ class AnakRantingMwcnu extends Model
         "posisi",
         "jabatan",
         "jemaah_id",
-        "kepengurusan_id",
         "village_id",
         "masa_khidmat",
+        "surat_keputusan_mwcnu_id"
     ];
 
     protected $casts = [
@@ -26,6 +26,11 @@ class AnakRantingMwcnu extends Model
     public function jemaah(): BelongsTo
     {
         return $this->belongsTo(Jemaah::class);
+    }
+
+    public function surat_keputusan_mwcnu(): BelongsTo
+    {
+        return $this->belongsTo(SuratKeputusanMwcnu::class);
     }
 
     public function getNamaLengkapAttribute()

@@ -17,8 +17,8 @@ class BanomMwcnu extends Model
         "jabatan",
         "masa_khidmat",
         "jemaah_id",
-        "kepengurusan_id",
         "banom_id",
+        "surat_keputusan_mwcnu_id"
     ];
 
     protected $casts = [
@@ -28,6 +28,11 @@ class BanomMwcnu extends Model
     public function jemaah(): BelongsTo
     {
         return $this->belongsTo(Jemaah::class);
+    }
+
+    public function surat_keputusan_mwcnu(): BelongsTo
+    {
+        return $this->belongsTo(SuratKeputusanMwcnu::class, "surat_keputusan_mwcnu_id");
     }
 
     public function getNamaLengkapAttribute()

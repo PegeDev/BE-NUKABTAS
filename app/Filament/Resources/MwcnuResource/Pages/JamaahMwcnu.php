@@ -76,13 +76,13 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
                     ->searchable(true)
                     ->label("NAMA LENGKAP/NIK"),
                 TextColumn::make('jenis_kelamin')
-                    ->description(fn(Jemaah $record): string => Carbon::parse($record->tanggal_lahir)->age . " Tahun")
-                    ->weight(FontWeight::Medium)
-                    ->formatStateUsing(fn($state) => strtoupper($state))
+                    ->description(fn(Jemaah $record): string => (Carbon::parse($record->tanggal_lahir)->age ?? "") . " Tahun")
+                    ->weight(FontWeight::SemiBold)
+                    ->formatStateUsing(fn($state) => Str::title($state))
                     ->label("GENDER/UMUR")
                     ->size(TextColumnSize::Small),
                 TextColumn::make('telp')
-                    ->description(fn(Jemaah $record): string => $record->email)
+                    ->description(fn(Jemaah $record): string => $record->email ?? "-")
                     ->weight(FontWeight::Medium)
                     ->label("TELEPON/EMAIL")
                     ->size(TextColumnSize::Small),
@@ -91,30 +91,34 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
                         return Str::title($state->provinsi()->first()->name);
                     })
                     ->description(function ($state) {
-                        $findCity =  $state ? $state->kota()->first()->name : "-";
-                        $findDistrict =  $state ? $state->kecamatan()->first()->name : "-";
-                        return Str::title($findDistrict  . ", " .  $findCity);
+                        $findCity =  $state ? $state->kota()->first()->name : null;
+                        $findDistrict =   $state ? $state->kecamatan()->first()->name : null;
+                        return Str::title($findDistrict  . ", " .  str_replace("KABUPATEN", "Kab. ", $findCity));
                     })
                     ->placeholder('-')
                     ->weight(FontWeight::Medium)
                     ->label("ALAMAT")
                     ->size(TextColumnSize::Small),
                 TextColumn::make('kepengurusan_type')
-                    ->formatStateUsing(function ($state) {
-                        return Str::upper($state->type ?? $state);
+                    ->formatStateUsing(fn($state) => Str::upper($state->type))
+                    ->description(function ($state) {
+                        $jabatan = $state?->jabatan ? preg_replace("/_/", " ", $state->jabatan) : null;
+                        $posisi = $state?->posisi ?? null;
+                        $separator = isset($posisi) && $jabatan ? ', ' : null;
+
+                        return Str::title($posisi . $separator . $jabatan);
                     })
-                    ->color(fn($state) => match ($state->type ?? $state) {
-                        "Pengurus MWC" => Color::Fuchsia,
-                        "Ranting" => Color::Cyan,
-                        "Anak Ranting" => Color::Blue,
-                        "Banom" => "warning",
-                        "Lembaga" => "danger",
+                    ->label("KEPENGURUSAN")
+                    ->color(fn($state) => match (Str::slug($state->type)) {
+                        "pengurus-mwc" => Color::Fuchsia,
+                        "ranting-nu" => Color::Cyan,
+                        "anak-ranting" => Color::Blue,
+                        "banom" => "warning",
+                        "lembaga" => "danger",
                         default => "gray"
                     })
                     ->badge()
-                    ->weight(FontWeight::SemiBold)
-                    ->label("KEPENGURUSAN")
-                    ->size(TextColumnSize::Small),
+                    ->placeholder("-")
             ])
             ->filters([
                 SelectFilter::make("alamat_jemaah")
@@ -245,7 +249,7 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
             ])
             ->headerActions([
                 Action::make("Import")
-                    ->visible($this->record->admin_id === auth()->user()->id)
+                    ->visible(fn() => $this->record->admin_id === auth()->user()->id || auth()->user()->hasRole(['super_admin', "admin_kabupaten"]))
                     ->icon("heroicon-o-document-arrow-up")
                     ->color('info')
                     ->size(ActionSize::Large)
@@ -256,7 +260,6 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
                             <p class="font-medium hover:underline text-primary">Template-Data-Warga.xlsx</p>
                             <a href="/template/template-data-peserta.xlsx" class="px-2 py-1 text-sm text-white rounded-md bg-primary" target="__blank">Download</a>
                             </div>'))
-
                             ->label('Template data warga'),
                         FileUpload::make("attachment")
                             ->hiddenLabel(true)
@@ -281,7 +284,7 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
 
                 Action::make("Export")
                     ->icon("heroicon-o-document-arrow-down")
-                    ->visible($this->record->admin_id === auth()->user()->id)
+                    ->visible(fn() => $this->record->admin_id === auth()->user()->id || auth()->user()->hasRole(['super_admin', "admin_kabupaten"]))
                     ->color('info')
                     ->size(ActionSize::Large)
                     ->action(
@@ -290,7 +293,7 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
                 Action::make("buat_warga")
                     ->label("Buat Warga baru")
                     ->icon("heroicon-o-user-plus")
-                    ->visible($this->record->admin_id === auth()->user()->id)
+                    ->visible(fn() => $this->record->admin_id === auth()->user()->id || auth()->user()->hasRole(['super_admin', "admin_kabupaten"]))
                     ->color('primary')
                     ->size(ActionSize::Large)
                     ->url(fn($record) => MwcnuResource::getUrl('buat-warga', ["record" => $this->record])),

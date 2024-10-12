@@ -31,7 +31,9 @@ class DetailMwcnu extends Page
     {
         $this->record = $this->resolveRecord($record);
         $this->state = request()->query('state', 'detail');
-        if (!in_array($this->state, ['detail', 'surat-keputusan', 'warga', 'pengurus'])) {
+        if (!in_array($this->state, ['detail', 'surat-keputusan', 'warga', 'kepengurusan'])) {
+            redirect()->to(MwcnuResource::getUrl('detail', ['record' => $this->record->id]));
+        } elseif ($this->state === 'surat-keputusan' && auth()->user()->id !== $this->record->admin_id && !auth()->user()->hasRole(['super_admin', 'admin_kabupaten'])) {
             redirect()->to(MwcnuResource::getUrl('detail', ['record' => $this->record->id]));
         }
     }
@@ -42,7 +44,7 @@ class DetailMwcnu extends Page
             EditAction::make("edit")
                 ->icon("heroicon-o-pencil-square")
                 ->label("Edit Detail")
-                ->visible(auth()->user()->id === $this->record->admin_id && $this->state === 'detail' || auth()->user()->hasRole(['super_admin', 'admin_kabupaten']))
+                ->visible(fn() => auth()->user()->id === $this->record->admin_id  || auth()->user()->hasRole(['super_admin', 'admin_kabupaten']) &&  $this->state === 'detail')
                 ->url(MwcnuResource::getUrl('edit', ['record' => $this->record->id])),
         ];
     }
@@ -54,19 +56,21 @@ class DetailMwcnu extends Page
             "view" => "filament.dashboard.resources.data-kecamatan.detail",
         ],
         [
-            "label" => "Surat Keputusan",
-            "icon" => "heroicon-o-document-check",
-            "view" => "filament.dashboard.resources.data-kecamatan.surat-keputusan",
-        ],
-        [
             "label" => "Warga",
             "icon" => "heroicon-o-user-group",
             "view" => "filament.dashboard.resources.data-kecamatan.warga",
+
+        ],
+        [
+            "label" => "Surat Keputusan",
+            "icon" => "heroicon-o-document-check",
+            "view" => "filament.dashboard.resources.data-kecamatan.surat-keputusan",
+
         ],
         [
             "label" => "Kepengurusan",
             "icon" => "heroicon-o-user",
             "view" => "filament.dashboard.resources.data-kecamatan.pengurus",
-        ]
+        ],
     ];
 }

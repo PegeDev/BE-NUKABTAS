@@ -1,20 +1,14 @@
-<?php
-use Illuminate\Support\Carbon;
 
-?>
 
-<div @class([ 'relative grid grid-cols-12 gap-6'=> $record->detail_mwcnus,
-    ])>
-
-    {{-- Informasi Lengkap MWCNU --}}
+<div @class([ 'relative grid grid-cols-12 gap-6'=> $record->detail_mwcnus,])>
 
     @if (!$this->record->detail_mwcnus)
     <x-filament::section>
         <div class="inset-0 flex flex-col items-center justify-center ">
-            @if ($record->admin_id === auth()->user()->id)
+            @if ($record->admin_id === auth()->user()->id || auth()->user()->hasRole("super_admin")))
             <x-filament::icon icon="heroicon-o-document-text" class="w-32 h-32 text-primary " />
-            <p class="font-medium text-center text-red-500">
-                Detail Lengkap Kecamatan {{ $record->nama_kecamatan }}
+            <p class="font-bold text-center text-red-500">
+                Lengkapi Detail Kecamatan {{ $record->nama_kecamatan }}
             </p>
             <p class="text-xs">Silahkan lengkapi detail kecamatan, atau klik pada tombol dibawah!</p>
             <x-filament::button class="mt-4"
@@ -23,10 +17,9 @@ use Illuminate\Support\Carbon;
                 Detail</x-filament::button>
             @else
             <x-filament::icon icon="heroicon-o-document-text" class="w-32 h-32 text-primary " />
-            <p class="font-bold text-center text-red-500 text-lg">
+            <p class="text-lg font-bold text-center text-red-500">
                 Detail Kecamatan {{ $record->nama_kecamatan }} Belum Tersedia
             </p>
-            <p class="text-xs">Silahkan lengkapi detail kecamatan, atau klik pada tombol dibawah!</p>
             @endif
             </p>
         </div>
@@ -172,7 +165,7 @@ use Illuminate\Support\Carbon;
                                         App\Enums\MwcnuStatus::DITINJAU ?
                                         "Ditinjau":"Disetujui" }}</p>
                                     <p class="text-sm">
-                                        {{ Carbon::parse($item->created_at)->isoFormat('DD MMM Y - HH:mm') }}</p>
+                                        {{ Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMM Y - HH:mm') }}</p>
                                 </div>
 
                             </div>
