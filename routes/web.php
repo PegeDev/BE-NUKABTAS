@@ -17,11 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('form/{code}', FormResponseJemaah::class)->name("form-response");
 
-// Route::get("/dashboard/profile", EditProfile::class)->name("profile");
-
-Route::get('/', function () {
-    return ['Laravel' => app()->version()];
-});
 
 
 Route::get('/surat_tugas/{filename}', function ($filename) {
