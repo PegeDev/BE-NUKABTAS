@@ -8,7 +8,7 @@
     <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Icon -->
-    <link rel="icon" href="{{ asset('images/logo.png') }}">
+    <link rel="icon" href="{{ asset('logo.webp') }}">
 
     <!-- Scripts -->
     @routes

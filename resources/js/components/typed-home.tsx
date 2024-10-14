@@ -6,7 +6,7 @@ export const TypedHome = () => {
             className="font-medium text-white md:text-lg h-14"
             typeSpeed={40}
             strings={[
-                "Siskader merupakan sistem informasi kader yang dirancang untuk mengelola kegiatan kaderisasi NU secara menyeluruh dan terintegrasi.",
+                "NUKABTAS merupakan sistem informasi kader yang dirancang untuk mengelola kegiatan kaderisasi NU secara menyeluruh dan terintegrasi.",
             ]}
         />
     );

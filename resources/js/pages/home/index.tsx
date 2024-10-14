@@ -1,10 +1,17 @@
 import { Button } from "@headlessui/react";
 import HomeLayout from "../../layouts/home-layout";
 import { TypedHome } from "@/components/typed-home";
+import { Head } from "@inertiajs/react";
 
 export default function HomeIndex() {
     return (
         <HomeLayout>
+            <Head title={"Ayo Gabung Jadi Kader Nahdlatul Ulama"}>
+                <meta
+                    name="description"
+                    content="NUKABTAS merupakan sistem informasi kader yang dirancang untuk mengelola kegiatan kaderisasi NU secara menyeluruh dan terintegrasi"
+                />
+            </Head>
             <div className="relative z-0 mx-auto flex max-w-full grid-cols-2 flex-col items-start justify-end gap-x-10 px-4 py-0 md:grid md:h-[80vh] md:px-8 md:py-10 lg:items-center lg:px-16 lg:py-0">
                 <div className="z-10 order-1 w-full mt-10 h-fit md:mt-24 md:w-auto lg:mt-0">
                     <p className="mb-4 text-center text-3xl font-bold tracking-wide text-white md:text-left lg:text-5xl lg:leading-[60px]">
