@@ -73,3 +73,26 @@ if (!function_exists('formatPhoneNumber')) {
         return '+(62) ' . $number;
     }
 }
+
+if (!function_exists('maskEmail')) {
+    function maskEmail($email)
+    {
+        // Pisahkan local part dan domain dari email
+        list($localPart, $domain) = explode("@", $email);
+
+        // Jika panjang localPart kurang dari atau sama dengan 2, kembalikan email asli
+        if (strlen($localPart) <= 2) {
+            return $email;
+        }
+
+        // Ambil huruf pertama dan terakhir dari localPart
+        $firstChar = $localPart[0];
+        $lastChar = $localPart[strlen($localPart) - 1];
+
+        // Buat masked email dengan huruf pertama, tanda bintang, dan huruf terakhir
+        $maskedLocalPart = $firstChar . str_repeat("*", 8) . $lastChar;
+
+        // Gabungkan kembali localPart yang dimask dengan domain
+        return $maskedLocalPart . "@" . $domain;
+    }
+}

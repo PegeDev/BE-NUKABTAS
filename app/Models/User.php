@@ -59,7 +59,7 @@ class User extends Authenticatable implements HasName, HasAvatar
 
     public function getFilamentName(): string
     {
-        return "{$this->email}";
+        return "{$this->name}";
     }
     public function getFilamentAvatarUrl(): ?string
     {

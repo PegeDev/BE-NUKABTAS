@@ -34,13 +34,13 @@ class DashboardPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('dashboard')
+            ->path("dashboard")
             ->darkMode(false)
             ->login()
             ->colors([
                 "primary" => Color::hex("#076857"),
                 "gray" => Color::Slate
             ])
-
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -49,7 +49,6 @@ class DashboardPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                // Widgets\FilamentInfoWidget::class,
             ])
             ->maxContentWidth(MaxWidth::ScreenTwoExtraLarge)
             ->middleware([

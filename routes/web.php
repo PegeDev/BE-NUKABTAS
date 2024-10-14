@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Livewire\MwcnuResource\FormResponseJemaah;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/', [HomeController::class, 'index'])
+    ->name('home');
 
 Route::get('form/{code}', FormResponseJemaah::class)->name("form-response");
 

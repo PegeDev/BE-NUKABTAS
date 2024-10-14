@@ -1,0 +1,26 @@
+{
+  "node_modules/laravel-vite-plugin/inertia-helpers/index.js": [],
+  "resources/js/components/layouts/home-layout.jsx": [
+    "/build/assets/index-CZPdh0cb.js"
+  ],
+  "resources/js/components/navbar.jsx": [
+    "/build/assets/index-CZPdh0cb.js"
+  ],
+  "resources/js/components/profile.jsx": [
+    "/build/assets/index-CZPdh0cb.js"
+  ],
+  "resources/js/lib/format.js": [
+    "/build/assets/index-CZPdh0cb.js"
+  ],
+  "resources/js/pages/home/index.jsx": [
+    "/build/assets/index-CZPdh0cb.js"
+  ],
+  "resources/js/routes/index.jsx": [
+    "/build/assets/index-CZPdh0cb.js"
+  ],
+  "resources/js/ssr.jsx": [],
+  "resources/js/ziggy.js": [],
+  "vendor/tightenco/ziggy/src/js/Route.js": [],
+  "vendor/tightenco/ziggy/src/js/Router.js": [],
+  "vendor/tightenco/ziggy/src/js/index.js": []
+}

@@ -12,9 +12,7 @@ use Illuminate\Support\Facades\Route;
 //                 ->middleware('guest')
 //                 ->name('register');
 
-Route::post('/login', [AuthenticatedSessionController::class, 'store'])
-    ->middleware('guest')
-    ->name('login');
+
 
 // Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
 //                 ->middleware('guest')
@@ -32,6 +30,16 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store'])
 //                 ->middleware(['auth', 'throttle:6,1'])
 //                 ->name('verification.send');
 
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->middleware('auth')
-    ->name('logout');
+
+Route::middleware("guest")->group(function () {
+
+    Route::post('login', [AuthenticatedSessionController::class, 'store'])
+        ->name('login');
+});
+
+
+
+Route::middleware("auth")->group(function () {;
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+        ->name('logout');
+});

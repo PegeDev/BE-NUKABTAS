@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View;
+use Inertia\Inertia;
+use Tighten\Ziggy\Ziggy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -41,10 +43,25 @@ class AppServiceProvider extends ServiceProvider
             }
         });
 
-        // FilamentView::registerRenderHook(
-        //     PanelsRenderHook::BODY_START,
-        //     fn(): string => Blade::render('@livewire(\'components.error-modal\')'),
-        // );
+
+        Inertia::share([
+            'auth' => function (Request $request) {
+
+                if (!$request->user()) {
+                    return null;
+                }
+                $name = str($request->user()->name)
+                    ->trim()
+                    ->explode(' ')
+                    ->map(fn(string $segment): string => filled($segment) ? mb_substr($segment, 0, 1) : '')
+                    ->join(' ');
+                return [
+                    ...$request->user()->only('id', 'name', 'email', 'profile_picture'),
+                    "email" => maskEmail($request->user()->email),
+                    "profile_picture" =>  'https://ui-avatars.com/api/?name=' . urlencode($name) . "&background=fff&color=076857&bold=true",
+                ];
+            }
+        ]);
 
         Carbon::setLocale("id");
 
