@@ -1,26 +1,41 @@
 {
   "node_modules/laravel-vite-plugin/inertia-helpers/index.js": [],
-  "resources/js/components/layouts/home-layout.jsx": [
-    "/build/assets/index-CZPdh0cb.js"
+  "resources/js/components/navbar.tsx": [
+    "/build/assets/index-C8vD4mJK.js"
   ],
-  "resources/js/components/navbar.jsx": [
-    "/build/assets/index-CZPdh0cb.js"
+  "resources/js/components/profile.tsx": [
+    "/build/assets/index-C8vD4mJK.js"
   ],
-  "resources/js/components/profile.jsx": [
-    "/build/assets/index-CZPdh0cb.js"
+  "resources/js/components/sidebar.tsx": [
+    "/build/assets/index-C8vD4mJK.js"
   ],
-  "resources/js/lib/format.js": [
-    "/build/assets/index-CZPdh0cb.js"
+  "resources/js/components/typed-home.tsx": [
+    "/build/assets/index-C8vD4mJK.js"
   ],
-  "resources/js/pages/home/index.jsx": [
-    "/build/assets/index-CZPdh0cb.js"
+  "resources/js/hooks/use-screen-size.ts": [
+    "/build/assets/index-C8vD4mJK.js"
+  ],
+  "resources/js/hooks/use-sidebar.ts": [
+    "/build/assets/index-C8vD4mJK.js"
+  ],
+  "resources/js/layouts/home-layout.jsx": [
+    "/build/assets/index-C8vD4mJK.js"
+  ],
+  "resources/js/pages/home/index.tsx": [
+    "/build/assets/index-C8vD4mJK.js"
   ],
   "resources/js/routes/index.jsx": [
-    "/build/assets/index-CZPdh0cb.js"
+    "/build/assets/index-C8vD4mJK.js"
   ],
-  "resources/js/ssr.jsx": [],
-  "resources/js/ziggy.js": [],
-  "vendor/tightenco/ziggy/src/js/Route.js": [],
-  "vendor/tightenco/ziggy/src/js/Router.js": [],
-  "vendor/tightenco/ziggy/src/js/index.js": []
+  "resources/js/ssr.tsx": [],
+  "vendor/tightenco/ziggy/dist/index.js": [],
+  "vendor/tightenco/ziggy/src/js/Route.js": [
+    "/build/assets/index-C8vD4mJK.js"
+  ],
+  "vendor/tightenco/ziggy/src/js/Router.js": [
+    "/build/assets/index-C8vD4mJK.js"
+  ],
+  "vendor/tightenco/ziggy/src/js/index.js": [
+    "/build/assets/index-C8vD4mJK.js"
+  ]
 }

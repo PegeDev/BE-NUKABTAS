@@ -526,7 +526,7 @@ class JamaahResource extends Resource implements HasShieldPermissions
                     ->label("GENDER/UMUR")
                     ->size(TextColumnSize::Small),
                 TextColumn::make('telp')
-                    ->formatStateUsing(fn($state) => "+" . str_replace('+', '', $state))
+                    ->formatStateUsing(fn($state) => "+" . str_replace(array('+', ',', '(', ')', ' '), '', $state))
                     ->description(fn(Jemaah $record): string => $record->email ?? "-")
                     ->weight(FontWeight::SemiBold)
                     ->label("TELEPON/EMAIL")

@@ -3,8 +3,6 @@
 namespace App\Filament\Resources\JamaahResource\Pages;
 
 use App\Filament\Resources\JamaahResource;
-use Filament\Actions;
-use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 
 class EditJamaah extends EditRecord
@@ -15,12 +13,6 @@ class EditJamaah extends EditRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['provinsi'] = "32";
-        return $data;
-    }
-
-    protected function mutateFormDataBeforeSave(array $data): array
-    {
-        dump($data);
         return $data;
     }
 

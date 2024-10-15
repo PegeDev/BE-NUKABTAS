@@ -22,8 +22,18 @@ export default {
             animation: {
                 "bounce-slow": "bounce-slow 2s ease infinite",
                 "bounce-in": "bounce-in .5s ease-out",
+                "fade-in-left": "fade-in-left 1s ease-out",
+                "fade-in-right": "fade-in-right 1s ease-out",
             },
             keyframes: {
+                "fade-in-left": {
+                    "0%": { opacity: "0", transform: "translateX(-50px)" },
+                    "100%": { opacity: "1", transform: "translateX(0)" },
+                },
+                "fade-in-right": {
+                    "0%": { opacity: "0", transform: "translateX(50px)" },
+                    "100%": { opacity: "1", transform: "translateX(0)" },
+                },
                 "bounce-slow": {
                     "0%": { transform: "translateY(0)" },
                     "50%": { transform: "translateY(-20px)" },

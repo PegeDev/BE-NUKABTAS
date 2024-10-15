@@ -168,7 +168,7 @@ class PengurusMwcnu extends Page implements HasForms, HasTable, HasActions
                             return $record->email;
                         }
                     })
-                    ->formatStateUsing(fn($state) => "+" . str_replace("+", "", $state ?? "") ?? "-")
+                    ->formatStateUsing(fn($state) => "+" . str_replace(array('+', ',', '(', ')', ' '), '', $state))
                     ->weight(FontWeight::Medium)
                     ->label("TELEPON/EMAIL")
                     ->size(TextColumnSize::Small),

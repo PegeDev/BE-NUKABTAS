@@ -82,6 +82,7 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
                     ->label("GENDER/UMUR")
                     ->size(TextColumnSize::Small),
                 TextColumn::make('telp')
+                    ->formatStateUsing(fn($state) => "+" . str_replace(array('+', ',', '(', ')', ' '), '', $state))
                     ->description(fn(Jemaah $record): string => $record->email ?? "-")
                     ->weight(FontWeight::Medium)
                     ->label("TELEPON/EMAIL")

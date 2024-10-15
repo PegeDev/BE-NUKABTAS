@@ -1,4 +1,4 @@
-import { usePage } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import { NAVIGATION_ROUTES } from "../routes";
 import { useScreenSize } from "@/hooks/use-screen-size";
 import { Sidebar } from "./sidebar";
@@ -14,8 +14,10 @@ export const Navbar = () => {
         current: url.includes(nav.path),
     }));
 
+    console.log({ url });
+
     return (
-        <nav className="sticky top-0 z-50 w-full max-w-6xl mx-auto transition-all ease-in-out bg-opacity-0 bg-primary">
+        <nav className="sticky top-0 z-50 w-full transition-all ease-in-out bg-opacity-0 bg-primary">
             <div className="max-w-full px-4 mx-auto md:px-8 lg:px-16">
                 <div className="flex items-center justify-between w-full py-4 md:py-5 lg:justify-between lg:space-x-10 lg:py-6">
                     <div>Logo</div>
@@ -37,12 +39,9 @@ export const Navbar = () => {
                                                         : ""
                                                 }`}
                                             >
-                                                <a
-                                                    href={navigation.path}
-                                                    className=""
-                                                >
+                                                <Link href={navigation.path}>
                                                     {navigation.label}
-                                                </a>
+                                                </Link>
                                             </div>
                                         </li>
                                     ))}

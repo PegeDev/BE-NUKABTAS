@@ -8,19 +8,14 @@ use App\Models\Jemaah;
 use App\Models\Kader;
 use App\Tables\Columns\ImageTextColumn;
 use Carbon\Carbon;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Support\Colors\Color;
 use Filament\Support\Enums\FontWeight;
-use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\TextColumn\TextColumnSize;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 
 class KaderResource extends Resource
@@ -62,7 +57,7 @@ class KaderResource extends Resource
                     ->label("GENDER/UMUR")
                     ->size(TextColumnSize::Small),
                 TextColumn::make('jemaah.telp')
-                    ->formatStateUsing(fn($state) => "+" . str_replace('+', '', $state))
+                    ->formatStateUsing(fn($state) => "+" . str_replace(array('+', ',', '(', ')', ' '), '', $state))
                     ->description(fn(Kader $record): string => Str::limit($record->jemaah->email ?? "-", 26, '...'))
                     ->tooltip(fn(Kader $record): string => $record->jemaah->email ?? "email belum ditambahkan!")
                     ->weight(FontWeight::SemiBold)
