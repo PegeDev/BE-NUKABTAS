@@ -11,13 +11,33 @@ export default {
     theme: {
         fontFamily: {
             sans: [
-                '"Inter"',
+                '"Poppins"',
                 ...require("tailwindcss/defaultTheme").fontFamily.sans,
             ],
         },
+        container: {
+            center: true,
+            maxWidth: {
+                DEFAULT: "100%",
+                sm: "540px",
+                md: "720px",
+                lg: "960px",
+                xl: "1140px",
+                "2xl": "1320px",
+            },
+            padding: {
+                DEFAULT: "1rem",
+                sm: "5rem",
+            },
+        },
         extend: {
+            maxWidth: {
+                "8xl": "94rem",
+            },
             colors: {
                 primary: "#076857",
+                foreground: "#212B36",
+                background: "#637381",
             },
             animation: {
                 "bounce-slow": "bounce-slow 2s ease infinite",

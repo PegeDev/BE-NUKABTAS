@@ -18,9 +18,9 @@ export default function HomeLayout({
             <Head title={title}>
                 <meta name="description" content={description} />
             </Head>
-            <div className="relative overflow-hidden bg-primary md:h-screen">
+            <div className="w-full min-h-screen">
                 <Navbar />
-                <main className="relative h-full">{children}</main>
+                <main>{children}</main>
             </div>
         </>
     );

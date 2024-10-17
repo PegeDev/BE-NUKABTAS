@@ -1,0 +1,131 @@
+:root {
+    --primary: #076857;
+}
+
+#galery {
+    padding: 4rem 0;
+}
+
+@media (max-width: 1440px) {
+    #galery {
+        padding: 7rem 0;
+    }
+}
+
+#galery .galery-slider {
+    height: 42rem;
+    padding: 2rem 0;
+    position: relative;
+}
+
+.galery-slide {
+    width: 30rem;
+    height: 34rem;
+    position: relative;
+}
+
+@media (max-width: 500px) {
+    .galery-slide {
+        width: 100% !important;
+        height: 20rem !important;
+    }
+    .galery-slide .galery-slide-img img {
+        width: 100% !important;
+        height: 20rem !important;
+    }
+    #galery .galery-slider {
+        height: 26rem;
+    }
+    #galery {
+        padding: 2rem 0;
+    }
+}
+
+.galery-slide .galery-slide-img img {
+    width: 30rem;
+    height: 34rem;
+    border-radius: 2rem;
+    object-fit: cover;
+}
+
+.galery-slide .galery-slide-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.galery-slide-content .galery-slide-content-bottom {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    color: var(--white);
+}
+
+.swiper-button-next {
+    left: 58% !important;
+    transform: translateX(-58%) !important;
+}
+
+@media (max-width: 990px) {
+    .swiper-button-next {
+        left: 70% !important;
+        transform: translateX(-70%) !important;
+    }
+}
+
+@media (max-width: 450px) {
+    .swiper-button-next {
+        left: 80% !important;
+        transform: translateX(-80%) !important;
+    }
+}
+
+@media (max-width: 990px) {
+    .swiper-button-prev {
+        left: 30% !important;
+        transform: translateX(-30%) !important;
+    }
+}
+
+@media (max-width: 450px) {
+    .swiper-button-prev {
+        left: 20% !important;
+        transform: translateX(-20%) !important;
+    }
+}
+
+.slider-arrow {
+    background: var(--white);
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    left: 42%;
+    transform: translateX(-42%);
+    filter: drop-shadow(0px 8px 24px rgba(18, 28, 53, 0.1));
+    border: 0.5px solid #f3f4fe;
+}
+
+.slider-arrow ion-icon {
+    font-size: 2rem;
+    color: #222224;
+}
+
+.slider-arrow::after {
+    content: "";
+}
+
+.swiper-pagination {
+    position: relative;
+    width: 15rem;
+    bottom: 1rem;
+}
+
+.swiper-pagination .swiper-pagination-bullet {
+    filter: drop-shadow(0px 8px 24px rgba(18, 28, 53, 0.1));
+}
+
+.swiper-pagination .swiper-pagination-bullet-active {
+    background: var(--primary);
+}

@@ -1,5 +1,5 @@
 export const NAVIGATION_ROUTES = [
-    { label: "Beranda", path: "", current: false },
+    { label: "Beranda", path: "#hero", current: false },
     {
         label: "Tentang",
         path: "#tentang-kami",

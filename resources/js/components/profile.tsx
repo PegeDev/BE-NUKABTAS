@@ -1,15 +1,13 @@
 import { useState } from "react";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { Link, router, usePage } from "@inertiajs/react";
-import { maskEmail } from "../lib/format";
-import { useRoute } from "ziggy-js";
 import clsx from "clsx";
 
 interface ProfileProps {
-    isMobile?: boolean;
+    isPrimary?: boolean;
 }
 
-export const Profile: React.FC<ProfileProps> = ({ isMobile = false }) => {
+export const Profile: React.FC<ProfileProps> = ({ isPrimary = false }) => {
     const [open, setOpen] = useState(false);
     const { auth: user }: any = usePage().props;
 
@@ -19,14 +17,14 @@ export const Profile: React.FC<ProfileProps> = ({ isMobile = false }) => {
                 className={clsx(
                     "block text-sm/6 font-semibold  focus:outline-none",
                     {
-                        "text-primary": isMobile,
-                        "text-white": !isMobile,
+                        "text-black": isPrimary,
+                        "text-white": !isPrimary,
                     }
                 )}
             >
                 <div className="flex items-center space-x-2">
                     <div className="flex flex-col text-right max-w-28">
-                        <p className="text-lg font-semibold truncate">
+                        <p className="text-base font-semibold truncate ">
                             {user?.name}
                         </p>
                         <p className="text-sm truncate">{user?.email}</p>
@@ -34,7 +32,13 @@ export const Profile: React.FC<ProfileProps> = ({ isMobile = false }) => {
                     <div className="relative">
                         <img
                             src={user?.profile_picture}
-                            className="w-10 h-10 rounded-full"
+                            className={clsx(
+                                "w-10 h-10 ring-2 p-[2px] rounded-full transition-all",
+                                {
+                                    "ring-primary": isPrimary,
+                                    "ring-white": !isPrimary,
+                                }
+                            )}
                         />
                     </div>
                 </div>
@@ -42,7 +46,7 @@ export const Profile: React.FC<ProfileProps> = ({ isMobile = false }) => {
             <PopoverPanel
                 transition
                 anchor="bottom end"
-                className="w-64 mt-4 rounded-xl bg-white text-sm/6 transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0"
+                className="w-64 mt-2 z-50 rounded-xl bg-white text-sm/6 transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0"
             >
                 <div className="px-4 py-2 border-b border-black/10">
                     <p className="font-semibold truncate text-nowrap">
@@ -79,9 +83,13 @@ export const Profile: React.FC<ProfileProps> = ({ isMobile = false }) => {
     ) : (
         <a
             href={"/dashboard/login"}
-            className={
-                "h-10 items-center justify-center gap-2.5 rounded-md px-4 py-3 transition-all ease-in-out hover:opacity-75 lg:flex bg-white text-black"
-            }
+            className={clsx(
+                "h-10 items-center justify-center gap-2.5 rounded-md px-4 py-3 transition-all ease-in-out hover:bg-current/55 lg:flex drop-shadow-lg",
+                {
+                    "bg-primary text-white": isPrimary,
+                    "bg-white text-black": !isPrimary,
+                }
+            )}
         >
             <img src={"iconShield.png"} className="w-5 h-5" />
             <p className="font-medium">Login</p>

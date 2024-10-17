@@ -24,12 +24,14 @@
         "@inertiajs/inertia-react": "^0.8.1",
         "@inertiajs/progress": "^0.2.7",
         "@inertiajs/react": "^1.2.0",
+        "@react-hooks-library/core": "^0.6.2",
         "@vitejs/plugin-react": "^4.3.2",
         "axios": "^1.7.7",
         "clsx": "^2.1.1",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-typed": "^2.0.12",
+        "swiper": "^11.1.14",
         "ziggy-js": "^2.3.0",
         "zustand": "^5.0.0-rc.2"
     }

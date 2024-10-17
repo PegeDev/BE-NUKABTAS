@@ -1,12 +1,17 @@
 import { Button } from "@headlessui/react";
-import { Dismiss24Filled, Grid24Filled } from "@fluentui/react-icons";
+import { Dismiss24Filled, Grid28Filled } from "@fluentui/react-icons";
 import { NAVIGATION_ROUTES } from "@/routes";
 import { Link, usePage } from "@inertiajs/react";
 import { useSidebar } from "@/hooks/use-sidebar";
 import clsx from "clsx";
 import { route } from "../../../vendor/tightenco/ziggy/src/js";
+import useScroll from "@/hooks/use-scroll";
 
-export const Sidebar = () => {
+interface SidebarProps {
+    isPrimary?: boolean;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({ isPrimary = false }) => {
     const { url } = usePage();
     const { auth: user }: any = usePage().props;
 
@@ -17,8 +22,14 @@ export const Sidebar = () => {
     const { isOpen, onToggle } = useSidebar();
     return (
         <>
-            <Button onClick={onToggle} className={"p-2 text-white"}>
-                <Grid24Filled className="text-lg" />
+            <Button
+                onClick={onToggle}
+                className={clsx("p-2 text-xl", {
+                    "text-primary": isPrimary,
+                    "text-white": !isPrimary,
+                })}
+            >
+                <Grid28Filled />
             </Button>
 
             <aside
@@ -42,26 +53,13 @@ export const Sidebar = () => {
                     </div>
                     <div>
                         <ul className="flex flex-col gap-4 mb-4">
-                            {formatedNav.map((navigation, index) => (
-                                <li
+                            {formatedNav.map((nav, index) => (
+                                <NavLink
                                     key={index}
-                                    className="font-medium text-primary"
-                                >
-                                    <div
-                                        className={`relative before:absolute before:h-0.5 before:bottom-0 before:w-0 before:content-[''] before:bg-primary before:hover:w-1/12 before:transition-all before:duration-300 ${
-                                            navigation.current
-                                                ? "before:w-1/12"
-                                                : ""
-                                        }`}
-                                    >
-                                        <a
-                                            href={navigation.path}
-                                            className="text-lg"
-                                        >
-                                            {navigation.label}
-                                        </a>
-                                    </div>
-                                </li>
+                                    name={nav.label}
+                                    selector={nav.path}
+                                    isActive={nav.current}
+                                />
                             ))}
                         </ul>
                     </div>
@@ -103,10 +101,10 @@ export const Sidebar = () => {
                                     as="button"
                                     type="button"
                                     className={
-                                        "w-full bg-red-500/20 px-4 py-2 rounded-md text-red-500"
+                                        "w-full bg-red-500/20 px-4 py-2 rounded-md text-red-500 text-sm"
                                     }
                                 >
-                                    KELUAR
+                                    Keluar
                                 </Link>
                             </div>
                         )}
@@ -116,3 +114,45 @@ export const Sidebar = () => {
         </>
     );
 };
+
+function NavLink({
+    isActive,
+    name,
+    selector,
+}: {
+    isActive: boolean;
+    name: string;
+    selector?: string;
+}) {
+    const el = document.querySelector(`section` + selector);
+
+    const isScrolled = useScroll();
+
+    const { onClose } = useSidebar();
+
+    const handleScroll = () => {
+        onClose();
+        el?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    return (
+        <li
+            onClick={handleScroll}
+            className={clsx(
+                "transition-all font-medium cursor-pointer select-none text-primary"
+            )}
+        >
+            <div
+                className={clsx(
+                    `relative before:absolute before:h-0.5 before:bottom-0 before:w-0 before:content-['']  before:hover:w-1/2 before:transition-all before:duration-300 `,
+                    {
+                        "before:w-1/2": isActive,
+                        "before:bg-primary": isScrolled,
+                    }
+                )}
+            >
+                {name}
+            </div>
+        </li>
+    );
+}
