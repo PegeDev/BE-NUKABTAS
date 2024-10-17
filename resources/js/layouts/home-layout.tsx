@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/navbar";
 import { Head } from "@inertiajs/react";
 import React from "react";
+import { Footer } from "./footer";
 
 interface HomeLayoutProps {
     children: React.ReactNode;
@@ -22,6 +23,7 @@ export default function HomeLayout({
                 <Navbar />
                 <main>{children}</main>
             </div>
+            <Footer />
         </>
     );
 }

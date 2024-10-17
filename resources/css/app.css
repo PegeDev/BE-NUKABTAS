@@ -52,10 +52,10 @@
 
     .fi-sidebar-item-active .fi-sidebar-item-label,
     .fi-sidebar-item-active .fi-sidebar-item-icon {
-        @apply text-white;
+        @apply text-white !important;
     }
     .fi-sidebar-item-label {
-        @apply text-white/70 hover:text-white;
+        @apply text-white/70 hover:text-white !important;
     }
 
     .fi-sidebar-item-button {
@@ -63,11 +63,11 @@
     }
 
     .fi-sidebar-item-icon {
-        @apply group-hover:text-white;
+        @apply group-hover:text-white !important;
     }
 
     .fi-sidebar-group-label {
-        @apply font-semibold text-white uppercase;
+        @apply font-semibold text-white uppercase !important;
     }
 
     /* .fi-sidebar-group .fi-icon-btn {

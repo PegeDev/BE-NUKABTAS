@@ -28,7 +28,12 @@ export const TentangSection = () => {
                         </p>
                     </div>
                     <div className="flex justify-center h-full p-16">
-                        <img src="/tentang-kami.svg" alt="Tentang Kami" />
+                        <img
+                            src="/tentang-kami.svg"
+                            alt="Tentang Kami"
+                            width={500}
+                            height={500}
+                        />
                     </div>
                 </div>
             </div>

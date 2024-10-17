@@ -27,7 +27,6 @@ export default {
             },
             padding: {
                 DEFAULT: "1rem",
-                sm: "5rem",
             },
         },
         extend: {

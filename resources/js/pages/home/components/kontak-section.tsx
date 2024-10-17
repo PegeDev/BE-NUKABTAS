@@ -13,7 +13,7 @@ export const KontakSection = () => {
     return (
         <section
             id="kontak"
-            className="after:-z-10 after:bg-white after:h-1/2 after:w-full after:left-0 after:bottom-0 after:content-[''] after:absolute after:mt-4 relative"
+            className="after:-z-10 after:bg-white after:h-[45%] after:w-full after:left-0 after:bottom-0 after:content-[''] after:absolute after:mt-4 relative"
         >
             <div className="container pt-32 pb-24">
                 <div className="grid gap-8 md:grid-cols-5">
