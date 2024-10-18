@@ -27,7 +27,8 @@
         "maatwebsite/excel": "3.1.48",
         "spatie/laravel-permission": "^6.9",
         "stevebauman/purify": "^6.2",
-        "tightenco/ziggy": "^2.3"
+        "tightenco/ziggy": "^2.3",
+        "webbingbrasil/filament-copyactions": "^3.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.13",

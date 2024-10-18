@@ -250,7 +250,7 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
             ])
             ->headerActions([
                 Action::make("Import")
-                    ->visible(fn() => $this->record->admin_id === auth()->user()->id || auth()->user()->hasRole(['super_admin', "admin_kabupaten"]))
+                    ->visible(fn() => $this->record->admin_id === auth()->user()->id || auth()->user()->hasRole(['super_admin', "admin_kabupaten"]) && $this->record->detail_mwcnus)
                     ->icon("heroicon-o-document-arrow-up")
                     ->color('info')
                     ->size(ActionSize::Large)
@@ -285,7 +285,7 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
 
                 Action::make("Export")
                     ->icon("heroicon-o-document-arrow-down")
-                    ->visible(fn() => $this->record->admin_id === auth()->user()->id || auth()->user()->hasRole(['super_admin', "admin_kabupaten"]))
+                    ->visible(fn() => $this->record->admin_id === auth()->user()->id || auth()->user()->hasRole(['super_admin', "admin_kabupaten"]) && $this->record->detail_mwcnus)
                     ->color('info')
                     ->size(ActionSize::Large)
                     ->action(
@@ -294,7 +294,7 @@ class JamaahMwcnu extends Page implements HasTable, HasForms
                 Action::make("buat_warga")
                     ->label("Buat Warga baru")
                     ->icon("heroicon-o-user-plus")
-                    ->visible(fn() => $this->record->admin_id === auth()->user()->id || auth()->user()->hasRole(['super_admin', "admin_kabupaten"]))
+                    ->visible(fn() => $this->record->admin_id === auth()->user()->id || auth()->user()->hasRole(['super_admin', "admin_kabupaten"]) && $this->record->detail_mwcnus)
                     ->color('primary')
                     ->size(ActionSize::Large)
                     ->url(fn($record) => MwcnuResource::getUrl('buat-warga', ["record" => $this->record])),

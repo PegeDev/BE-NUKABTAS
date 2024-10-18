@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Components\UseManageAdminModal;
 use App\Filament\Resources\MwcnuResource\Pages;
 use App\Imports\MwcnuImport;
 use App\Models\DetailMwcnu;
@@ -11,18 +12,23 @@ use App\Models\User;
 use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Carbon\Carbon;
 use Filament\Actions\Concerns\InteractsWithRecord;
+use Filament\Actions\CreateAction;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action as FormAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Notifications\Notification;
+use Filament\Pages\Page;
+use Filament\Resources\Pages\EditRecord;
 use Filament\Resources\Resource;
 use Filament\Support\RawJs;
 use Filament\Tables;
@@ -33,6 +39,8 @@ use Filament\Tables\Table;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
+use Livewire\Component as Livewire;
+use Webbingbrasil\FilamentCopyActions\Forms\Actions\CopyAction;
 
 class MwcnuResource extends Resource implements HasShieldPermissions
 {
@@ -57,6 +65,14 @@ class MwcnuResource extends Resource implements HasShieldPermissions
     {
         return $form
             ->schema([
+                Section::make("Data Kecamatan")
+                    ->schema([
+                        TextInput::make("nama_kecamatan")
+                            ->required()
+                            ->disabled(fn(Page $livewire): bool => $livewire instanceof EditRecord)
+                            ->placeholder("Nama Kecamatan")
+                            ->label("Nama Kecamatan"),
+                    ]),
                 Group::make()
                     ->columnSpanFull()
                     ->columns(12)
@@ -95,7 +111,15 @@ class MwcnuResource extends Resource implements HasShieldPermissions
                                         TextInput::make("google_maps")
                                             ->url()
                                             ->required()
-                                            ->suffixIcon('heroicon-o-globe-alt')
+                                            ->suffixAction(
+                                                fn() =>
+                                                FormAction::make('openGoogleMaps')
+                                                    ->tooltip("Buka di Google Maps")
+                                                    ->icon("fluentui-globe-search-20-o")
+                                                    ->url('https://www.google.com/maps')
+                                                    ->openUrlInNewTab(true)
+
+                                            )
                                             ->placeholder("https://goo.gl/maps/...")
                                             ->label("Lokasi Google Maps"),
                                     ]),
@@ -140,7 +164,7 @@ class MwcnuResource extends Resource implements HasShieldPermissions
                                             ->maxSize(2048)
                                             ->directory("surat_tugas")
                                             ->getUploadedFileNameForStorageUsing(
-                                                fn(Get $get, DetailMwcnu $record): string => (string) Str::slug("Surat-Tugas-Admin-" . $get("nama_admin")) . ".pdf",
+                                                fn(Get $get): string => (string) Str::slug("Surat-Tugas-Admin-" . $get("nama_admin")) . ".pdf",
                                             )
                                             ->acceptedFileTypes(["application/pdf"])
                                             ->required(),
@@ -189,22 +213,6 @@ class MwcnuResource extends Resource implements HasShieldPermissions
             ->filters([
                 //
             ])
-            ->headerActions([
-                Action::make("import_kecamatan")
-                    ->label("Import Kecamatan")
-                    ->icon("heroicon-o-document-arrow-down")
-                    ->form([
-                        FileUpload::make("attachment")
-                            ->acceptedFileTypes(["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel"])
-                    ])
-                    ->visible(auth()->user()->can("import_mwcnu"))
-                    ->action(
-                        function (array $data) {
-                            $file = public_path('storage/' . $data["attachment"]);
-                            Excel::import(new MwcnuImport, $file);
-                        }
-                    )
-            ])
             ->actions([
                 ActionGroup::make([
                     Action::make('lihat_detail')
@@ -217,114 +225,18 @@ class MwcnuResource extends Resource implements HasShieldPermissions
                     Action::make('kepengurusan')
                         ->icon("heroicon-o-user")
                         ->label("Manage Admin")
+                        ->modal()
                         ->fillForm(fn(Mwcnu $record) => $record->user?->toArray())
-                        ->form([
-                            Actions::make([
-                                FormAction::make("createUser")
-                                    ->button()
-                                    ->label("Create User")
-                                    ->outlined()
-                                    ->action(function (Mwcnu $record) {
-                                        $user = $record->user()->create([
-                                            "name" => "Kecamatan " . $record->nama_kecamatan,
-                                            "email" => "mwc_" . Str::lower(Str::slug($record->nama_kecamatan)) . "@nukabtas.or.id",
-                                            "profile_picture" => "",
-                                            "email_verified_at" => now(),
-                                            "password" => Hash::make("password"),
-                                        ]);
-                                        $record->user()->associate($user);
-                                        $record->save();
-                                        $record->refresh();
-
-                                        $role = Role::where("name", "admin_kecamatan")->first();
-
-                                        $role->users()->attach($user->id);
-                                        $role->save();
-                                        $role->refresh();
-                                        $this->dispatch('close-modal', id: 'edit-user');
-                                    })
-                            ])
-                                ->fullWidth()
-                                ->visible(fn(Mwcnu $record) => $record->admin_id === null),
-                            Grid::make()
-                                ->schema([
-                                    Grid::make()
-                                        ->schema([
-                                            TextInput::make("name")
-                                                ->readOnly()
-                                                ->label("Nama Lengkap"),
-                                            TextInput::make("email")
-                                                ->extraAttributes([
-                                                    "class" => "truncate"
-                                                ])
-                                                ->readOnly()
-                                                ->label("Email")
-                                        ]),
-                                    Grid::make()
-                                        ->schema([
-                                            TextInput::make("paswd")
-                                                ->default("1234567890")
-                                                ->suffixAction(
-                                                    FormAction::make('toggle-password-visibility')
-                                                        ->icon('heroicon-o-arrows-right-left')
-                                                        ->tooltip("Reset Password")
-                                                        ->label("Ganti Password")
-                                                        ->iconSize('md')
-                                                        ->action(function ($component, Set $set, Mwcnu $record) {
-
-                                                            $password = Str::lower($record->nama_kecamatan) . "@" . mt_rand(100000, 999999);
-
-                                                            $user = User::find($record->admin_id);
-
-                                                            $user->password = Hash::make($password);
-                                                            $user->remember_token = null;
-
-                                                            $user->save();
-
-                                                            $set('paswd', $password);
-
-                                                            $component->type("text");
-                                                        })
-
-                                                )
-                                                ->readOnly()
-                                                ->type("text")
-                                                ->label("Password"),
-                                            DateTimePicker::make("created_at")
-                                                ->readOnly()
-                                                ->format("Y-m-d H:i:s")
-                                                ->label("Dibuat"),
-
-                                        ])
-
-                                ])
-                                ->columns(2)
-                                ->visible(fn(Mwcnu $record) => $record->admin_id !== null),
-                        ])
-                        ->modalSubmitAction(false)
                         ->modalWidth("lg")
-                        ->visible(auth()->user()->can("manage_admin_mwcnu")),
-
+                        ->modalCancelActionLabel("Tutup")
+                        ->modalSubmitAction(false)
+                        ->form(UseManageAdminModal::schema())
                 ])
                     ->label("Action")
                     ->icon("heroicon-o-ellipsis-vertical")
 
             ])
-            ->recordUrl(fn(Mwcnu $record) => self::getUrl("detail", ["record" => $record]))
-            ->groupedBulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
-
-
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
+            ->recordUrl(fn(Mwcnu $record) => self::getUrl("detail", ["record" => $record]));
     }
 
 
@@ -346,7 +258,7 @@ class MwcnuResource extends Resource implements HasShieldPermissions
     {
         return [
             'index' => Pages\ListMwcnus::route('/'),
-            'create' => Pages\CreateMwcnu::route('/create'),
+            'create' => Pages\CreateMwcnu::route('/buat'),
             'edit' => Pages\EditMwcnu::route('/{record}/edit'),
             'detail' => Pages\DetailMwcnu::route('/{record}'),
             'surat-keputusan' => Pages\SuratKeputusanMwcnu::route('/{record}?state=surat-keputusan'),

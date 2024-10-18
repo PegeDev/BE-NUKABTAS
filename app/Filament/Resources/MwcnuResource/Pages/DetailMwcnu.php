@@ -8,7 +8,6 @@ use Filament\Resources\Concerns\HasTabs;
 use Filament\Resources\Pages\Page;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
 use Filament\Actions\EditAction;
-use Filament\Pages\Page as PagesPage;
 use Illuminate\Contracts\Support\Htmlable;
 
 class DetailMwcnu extends Page
